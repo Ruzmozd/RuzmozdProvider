@@ -6,15 +6,15 @@ plugins {
 
 group = "ir.hirkancorp.ruzmozdprovider.buildlogic"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-}
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_17
+//    targetCompatibility = JavaVersion.VERSION_17
+//}
+//tasks.withType<KotlinCompile>().configureEach {
+//    kotlinOptions {
+//        jvmTarget = JavaVersion.VERSION_17.toString()
+//    }
+//}
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
@@ -23,9 +23,17 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "ruzmozdprovider.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+//        register("applicationComposeConventionPlugin") {
+//            id = "ruzmozdprovider.android.compose.application"
+//            implementationClass = "ApplicationComposeConventionPlugin"
+//        }
+        register("androidApplication") {
+            id = "ruzmozdprovider.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
         }
+//        register("androidApplicationConventionPlugin") {
+//            id = "ruzmozdprovider.android.library"
+//            implementationClass = "AndroidLibraryConventionPlugin"
+//        }
     }
 }

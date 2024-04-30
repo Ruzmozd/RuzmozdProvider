@@ -1,23 +1,16 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("ruzmozdprovider.android.application")
+//    id("ruzmozdprovider.android.compose.application")
+//    alias(libs.plugins.androidApplication)
+//    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 android {
     namespace = "ir.hirkancrop.ruzmozdprovider"
-    compileSdk = 34
-
     defaultConfig {
         applicationId = "ir.hirkancrop.ruzmozdprovider"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
     }
 
     buildTypes {
@@ -29,19 +22,7 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
