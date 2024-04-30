@@ -1,4 +1,4 @@
-package ir.hirkancrop.ruzmozdprovider.ui.theme
+package ir.hirkancorp.ruzmozdprovider.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

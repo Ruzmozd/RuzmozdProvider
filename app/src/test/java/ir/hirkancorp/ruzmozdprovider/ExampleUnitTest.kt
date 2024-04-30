@@ -1,4 +1,4 @@
-package ir.hirkancrop.ruzmozdprovider
+package ir.hirkancorp.ruzmozdprovider
 
 import org.junit.Test
 

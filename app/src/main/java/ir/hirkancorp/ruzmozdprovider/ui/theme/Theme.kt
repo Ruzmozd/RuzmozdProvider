@@ -1,4 +1,4 @@
-package ir.hirkancrop.ruzmozdprovider.ui.theme
+package ir.hirkancorp.ruzmozdprovider.ui.theme
 
 import android.app.Activity
 import android.os.Build
