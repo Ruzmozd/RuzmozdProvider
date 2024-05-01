@@ -1,8 +1,5 @@
 plugins {
     id("ruzmozdprovider.android.application")
-//    id("ruzmozdprovider.android.compose.application")
-//    alias(libs.plugins.androidApplication)
-//    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 android {
