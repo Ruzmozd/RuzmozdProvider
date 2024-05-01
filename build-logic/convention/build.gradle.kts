@@ -17,5 +17,13 @@ gradlePlugin {
             id = "ruzmozdprovider.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+        register("androidLibrary") {
+            id = "ruzmozdprovider.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "ruzmozdprovider.android.presenter"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
     }
 }
