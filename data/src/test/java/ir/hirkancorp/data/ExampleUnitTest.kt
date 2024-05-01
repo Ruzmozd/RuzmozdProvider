@@ -1,4 +1,4 @@
-package ir.hirkancrop.core
+package ir.hirkancorp.data
 
 import org.junit.Test
 

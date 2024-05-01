@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "it.kirkancorp.core"
+    namespace = "it.kirkancorp.data"
 }
 
 dependencies {

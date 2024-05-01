@@ -1,9 +1,9 @@
 plugins {
-    id("ruzmozdprovider.android.library")
+    id("ruzmozdprovider.android.library.compose")
 }
 
 android {
-    namespace = "it.kirkancorp.core"
+    namespace = "it.kirkancorp.presenter"
 }
 
 dependencies {

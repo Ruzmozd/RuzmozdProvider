@@ -22,7 +22,7 @@ gradlePlugin {
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "ruzmozdprovider.android.presenter"
+            id = "ruzmozdprovider.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
     }
