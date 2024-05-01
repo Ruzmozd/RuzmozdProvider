@@ -13,7 +13,7 @@ class AndroidLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply {
-                plugin("con.android.library")
+                plugin("com.android.library")
                 plugin("org.jetbrains.kotlin.android")
             }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
