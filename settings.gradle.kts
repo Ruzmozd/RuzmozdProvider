@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        includeBuild("build-logic")
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -16,9 +17,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 rootProject.name = "RuzmozdProvider"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":core")
+include(":presenter")
