@@ -1,17 +1,18 @@
 plugins {
-    id("ruzmozdprovider.android.library")
+    alias(libs.plugins.ruzmozdprovider.android.library)
 }
 
 android {
-    namespace = "it.kirkancorp.data"
+    namespace = "it.hirkancorp.data"
 }
 
 dependencies {
+    implementation(libs.bundles.androidX)
+    implementation(libs.bundles.dataStore)
+    implementation(libs.bundles.kotlinCoroutines)
+    implementation(libs.bundles.ktor)
+    implementation(libs.bundles.koin)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(project(":core"))
+    implementation(project(":domain"))
 }

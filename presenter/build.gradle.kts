@@ -1,17 +1,21 @@
 plugins {
-    id("ruzmozdprovider.android.library.compose")
+    alias(libs.plugins.ruzmozdprovider.android.library)
+    alias(libs.plugins.ruzmozdprovider.android.library.compose)
 }
 
 android {
-    namespace = "it.kirkancorp.presenter"
+    namespace = "it.hirkancorp.presenter"
 }
 
 dependencies {
+    implementation(libs.bundles.androidX)
+    implementation(libs.bundles.kotlinCoroutines)
+    implementation(libs.bundles.coil)
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.pagingCompose)
+    implementation(libs.bundles.playServicesLocation)
+    implementation(libs.bundles.osmAndroid)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(project(":core"))
+    implementation(project(":domain"))
 }

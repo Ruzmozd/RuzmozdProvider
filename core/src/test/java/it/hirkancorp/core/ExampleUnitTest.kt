@@ -1,4 +1,4 @@
-package it.kirkancorp.core
+package it.hirkancorp.core
 
 import org.junit.Test
 

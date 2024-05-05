@@ -6,6 +6,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.dependencies
 
 class AndroidApplicationConventionPlugin: Plugin<Project> {
 
@@ -25,7 +26,17 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
                     }
                 }
                 configureKotlinAndroid(libs, this)
-                configureComposeAndroid(libs)
+                configureComposeAndroid(libs,this)
+            }
+
+
+            dependencies {
+                add("implementation", libs.findBundle("androidX").get())
+                add("implementation", libs.findBundle("splashApi").get())
+                add("implementation", libs.findBundle("kotlinCoroutines").get())
+                add("implementation", libs.findBundle("koin").get())
+                add("implementation", libs.findBundle("coil").get())
+                add("implementation", libs.findBundle("test").get())
             }
         }
     }
