@@ -1,10 +1,9 @@
 plugins {
-    alias(libs.plugins.ruzmozdprovider.android.library)
     alias(libs.plugins.ruzmozdprovider.android.library.compose)
 }
 
 android {
-    namespace = "it.hirkancorp.presenter"
+    namespace = "ir.hirkancorp.presenter"
 }
 
 dependencies {

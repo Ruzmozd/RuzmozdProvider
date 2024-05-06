@@ -1,9 +1,12 @@
 import com.android.build.api.dsl.ApplicationExtension
 import ir.hrkancorp.ruzmozdprovider.configureComposeAndroid
 import ir.hrkancorp.ruzmozdprovider.configureKotlinAndroid
+import ir.hrkancorp.ruzmozdprovider.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ExternalModuleDependencyBundle
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.dependencies
@@ -31,12 +34,12 @@ class AndroidApplicationConventionPlugin: Plugin<Project> {
 
 
             dependencies {
-                add("implementation", libs.findBundle("androidX").get())
-                add("implementation", libs.findBundle("splashApi").get())
-                add("implementation", libs.findBundle("kotlinCoroutines").get())
-                add("implementation", libs.findBundle("koin").get())
-                add("implementation", libs.findBundle("coil").get())
-                add("implementation", libs.findBundle("test").get())
+                implementation(libs.findBundle("androidX").get())
+                implementation(libs.findBundle("splashApi").get())
+                implementation(libs.findBundle("kotlinCoroutines").get())
+                implementation(libs.findBundle("koin").get())
+                implementation(libs.findBundle("coil").get())
+                implementation(libs.findBundle("test").get())
             }
         }
     }

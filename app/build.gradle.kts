@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "ir.hirkancrop.ruzmozdprovider"
+    namespace = "ir.hirkancorp.ruzmozdprovider"
     defaultConfig {
-        applicationId = "ir.hirkancrop.ruzmozdprovider"
+        applicationId = "ir.hirkancorp.ruzmozdprovider"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
     }

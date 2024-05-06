@@ -16,8 +16,7 @@ activityCompose = "1.9.0"
 composeCompiler = "1.5.1"
 composeBom = "2023.08.00"
 appcompat = "1.6.1"
-material = "1.11.0"
-material3 = "1.1.0"
+material = "1.6.7"
 navigationCompose = "2.7.7"
 accompanistPermissions = "0.34.0"
 preferencesDataStore = "1.0.0"
@@ -27,17 +26,18 @@ paging = "3.2.1"
 pagingCompose = "3.3.0-alpha04"
 koin = "3.5.0"
 ktor = "2.3.2"
-kotlinXSerializationPlugin = "1.9.21"
+kotlinXSerializationPlugin = "1.9.0"
 kotlinXSerialization = "1.6.2"
 coil = "2.5.0"
 playServicesLocation = "21.2.0"
 osmAndroid = "6.1.18"
 osmBonusPack = "6.9.0"
+accompanistInsets = "0.23.1"
 
 [libraries]
 #androidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 
@@ -51,7 +51,6 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3",version.ref = "material3"}
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -62,6 +61,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 accompanist_permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+accompanist-inset = {group = "com.google.accompanist",name = "accompanist-insets",version.ref = "accompanistInsets"}
 
 
 # SplashApi
@@ -94,7 +94,7 @@ ktor-client-serialization-json = { group = "io.ktor", name = "ktor-serialization
 
 
 # KotlinXSerialization
-kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinXSerialization" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinXSerializationPlugin" }
 
 # Coil
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -109,7 +109,7 @@ osm-bonus-pack = { group = "com.github.MKergall", name = "osmbonuspack", version
 
 [bundles]
 androidX = ["androidx-core-ktx", "androidx-appcompat"]
-compose = ["androidx-compose-bom" , "androidx-material3", "navigation-compose", "androidx-core-ktx", "androidx-activity-compose", "androidx-lifecycle-runtime-ktx", "androidx-ui", "compose-runtime", "androidx-ui-graphics", "androidx-ui-tooling", "material","accompanist_permissions"]
+compose = ["androidx-compose-bom" , "navigation-compose", "androidx-core-ktx", "androidx-activity-compose", "androidx-lifecycle-runtime-ktx", "androidx-ui", "compose-runtime", "androidx-ui-graphics", "androidx-ui-tooling", "material","accompanist_permissions","accompanist-inset"]
 dataStore = ["preferences-data-store"]
 splashApi = ["splash-api"]
 pagingRunTime = ["paging-runtime"]
@@ -121,11 +121,13 @@ kotlinCoroutines = ["coroutines"]
 ktor = ["ktor-android", "ktor-core", "ktor-auth", "ktor-logging", "ktor-navigation", "ktor-client-serialization", "ktor-client-serialization-json"]
 coil = ["coil"]
 test = ["junit","androidx-junit","androidx-espresso-core"]
+kotlinx-serialization = ["kotlinx-serialization"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+serialization = {id = "org.jetbrains.kotlin.plugin.serialization",version.ref = "kotlinXSerializationPlugin" }
 
 # ruzmozd plugins
 ruzmozdprovider-android-application = { id = "ruzmozdprovider.android.application", version = "unspecified" }

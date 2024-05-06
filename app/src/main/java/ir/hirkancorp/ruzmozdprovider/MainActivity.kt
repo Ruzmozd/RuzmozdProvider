@@ -4,21 +4,45 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import ir.hirkancorp.ruzmozdprovider.ui.theme.RuzmozdProviderTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
+import androidx.navigation.compose.rememberNavController
+import ir.hirkancorp.presenter.core.theme.RuzmozdProviderTheme
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            RuzmozdProviderTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        installSplashScreen()
 
+        setContent {
+            val navController = rememberNavController()
+            ProvideWindowInsets(
+                windowInsetsAnimationsEnabled = true,
+            ) {
+                RuzmozdProviderTheme {
+                    Scaffold(
+
+                    ){ padding ->
+                        Surface(
+                            modifier = Modifier
+                                .padding(padding)
+                                .imePadding()
+                                .fillMaxSize()
+                                .statusBarsPadding()
+                                .navigationBarsWithImePadding(),
+                        ) {
+
+                        }
+                    }
                 }
             }
         }

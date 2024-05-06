@@ -4,15 +4,14 @@ import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.provideDelegate
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal fun Project.configureKotlinAndroid(
     libs: VersionCatalog,
     commonExtension: CommonExtension<*, *, *, *, *, *>
 ) {
-    commonExtension.apply {
+
+    with(commonExtension) {
         compileSdk = Integer.parseInt(libs.findVersion("compileSdk").get().toString())
         defaultConfig {
             minSdk = Integer.parseInt(libs.findVersion("minSdk").get().toString())
@@ -23,14 +22,35 @@ internal fun Project.configureKotlinAndroid(
             targetCompatibility = JavaVersion.VERSION_17
         }
 
+
+
+
         kotlinOptions {
             val warningsAsErrors: String? by project
             allWarningsAsErrors = warningsAsErrors.toBoolean()
             jvmTarget = JavaVersion.VERSION_17.toString()
         }
-    }
-}
 
-fun CommonExtension<*, *, *, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
+    }
+/*
+    with(android()) {
+        buildTypes {
+            release {
+                isMinifyEnabled = false
+                productionVariables()
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
+            }
+
+            debug {
+                developmentVariables()
+            }
+
+            staging {
+                stagingVariables()
+            }
+        }
+    }*/
 }

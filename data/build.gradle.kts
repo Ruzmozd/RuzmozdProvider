@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "it.hirkancorp.data"
+    namespace = "ir.hirkancorp.data"
 }
 
 dependencies {
@@ -12,7 +12,7 @@ dependencies {
     implementation(libs.bundles.kotlinCoroutines)
     implementation(libs.bundles.ktor)
     implementation(libs.bundles.koin)
-
+    implementation(libs.bundles.pagingRunTime)
     implementation(project(":core"))
     implementation(project(":domain"))
 }

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "it.hirkancorp.core"
+    namespace = "ir.hirkancorp.core"
 }
 
 dependencies {

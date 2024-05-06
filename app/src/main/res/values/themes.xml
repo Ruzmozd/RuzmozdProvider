@@ -2,4 +2,12 @@
 <resources>
 
     <style name="Theme.RuzmozdProvider" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="RuzmozdSplash" parent="Theme.SplashScreen">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowSplashScreenBackground">@color/brand_yellow</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.RuzmozdProvider</item>
+    </style>
 </resources>
