@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import ir.hirkancorp.presenter.core.theme.RuzmozdProviderTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
+import ir.hirkancorp.presenter.nav_graphs.main.MainNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                                 .statusBarsPadding()
                                 .navigationBarsWithImePadding(),
                         ) {
-
+                            MainNavGraph(navHostController = navController)
                         }
                     }
                 }

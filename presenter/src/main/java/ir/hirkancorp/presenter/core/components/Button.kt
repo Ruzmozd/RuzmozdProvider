@@ -50,7 +50,7 @@ fun Button(
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
-fun Buttona() {
+fun ButtonPreview() {
     val spacing = LocalSpacing.current
     RuzmozdProviderTheme {
         Button(

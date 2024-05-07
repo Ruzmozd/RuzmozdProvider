@@ -1,6 +1,7 @@
 package ir.hirkancorp.data.common.api_utils
 
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.utils.ApiResult
@@ -15,19 +16,20 @@ fun <T> commonRequest(
 ):Flow<ApiResult<T>> = flow {
     emit(ApiResult.Loading())
     val response = httpResponse()
+    val status = response.status
     try {
-        val isFailure = errorCodes.any { httpStatusCode -> response.status == httpStatusCode }
+        val isFailure = errorCodes.any { httpStatusCode -> status == httpStatusCode }
         if (isFailure) {
-            emit(ApiResult.Error(response.status.description))
+            emit(ApiResult.Error(code = status.value, message = status.description))
         } else {
             val actionIndex: Int =
                 successActions.map { it.first }
-                    .indexOfFirst { httpStatusCode -> response.status == httpStatusCode }
+                    .indexOfFirst { httpStatusCode -> status == httpStatusCode }
             emit(ApiResult.Success(successActions[actionIndex].second(response)))
         }
     } catch (exception: Exception) {
         LoggerUtil.logE("common-http-request", exception.message ?: "Unknown error!")
-        emit(ApiResult.Error(exception.localizedMessage?:"Unknown error!"))
+        emit(ApiResult.Error(code = status.value, message = exception.localizedMessage?:"Unknown error!"))
     }
 }
 
@@ -38,18 +40,19 @@ fun <T> commonRequest(
 ): Flow<ApiResult<T>> = flow {
     emit(ApiResult.Loading())
     val response = httpResponse()
+    val status = response.status
     try {
         val isFailure = errorCodes.any { httpStatusCode ->
-            response.status == httpStatusCode
+            status == httpStatusCode
         }
         if (isFailure) {
-            emit(ApiResult.Error(response.status.description))
+            emit(ApiResult.Error(code = status.value, message = status.description))
         } else {
             emit(ApiResult.Success(successAction.second(response)))
         }
     } catch (exception: Exception) {
         LoggerUtil.logE("common-http-request", exception.message ?: "Unknown error!")
-        emit(ApiResult.Error(exception.localizedMessage?:"Unknown error!"))
+        emit(ApiResult.Error(code = status.value, message = exception.localizedMessage?:"Unknown error!"))
     }
 }
 

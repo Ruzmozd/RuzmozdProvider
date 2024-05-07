@@ -3,5 +3,5 @@ package ir.hirkancorp.domain.login.model
 data class User(
     val phoneNumber: String,
     val otp: String,
-    val userType: String = "user"
+    val userType: String = "Provider"
 )
