@@ -66,11 +66,16 @@ fun PhotoSelectorView(onImageSelected: (Uri?) -> Unit, modalSheetState: ModalBot
 
     val context = LocalContext.current
 
-    val file = context.createImageFile()
+    val file = remember {
+        context.createImageFile()
+    }
 
-    val uri: Uri = FileProvider.getUriForFile(
-        context, context.packageName + ".provider", file
-    )
+
+    val uri = remember {
+        FileProvider.getUriForFile(
+            context, context.packageName + ".provider", file
+        )
+    }
 
     val cameraLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicture()) { isSuccess ->
