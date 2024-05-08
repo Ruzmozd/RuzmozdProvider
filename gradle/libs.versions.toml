@@ -1,4 +1,10 @@
 [versions]
+compileSdk = "34"
+minSdk = "24"
+targetSdk = "34"
+versionCode = "1"
+versionName = "1.0"
+
 agp = "8.3.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.0"
@@ -7,25 +13,123 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.9.0"
+composeCompiler = "1.5.1"
 composeBom = "2023.08.00"
+appcompat = "1.6.1"
+material = "1.6.7"
+navigationCompose = "2.7.7"
+accompanistPermissions = "0.34.0"
+preferencesDataStore = "1.0.0"
+splashApi = "1.0.0"
+coroutines = "1.3.9"
+paging = "3.2.1"
+pagingCompose = "3.3.0-alpha04"
+koin = "3.5.0"
+ktor = "2.3.2"
+kotlinXSerializationPlugin = "1.9.0"
+kotlinXSerialization = "1.6.2"
+coil = "2.5.0"
+playServicesLocation = "21.2.0"
+osmAndroid = "6.1.18"
+osmBonusPack = "6.9.0"
+accompanistInsets = "0.23.1"
 
 [libraries]
+#androidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+
+#unitTest
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+
+#compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+accompanist_permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+accompanist-inset = {group = "com.google.accompanist",name = "accompanist-insets",version.ref = "accompanistInsets"}
+
+
+# SplashApi
+splash-api = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashApi" }
+
+# DataStore
+preferences-data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "preferencesDataStore" }
+
+# Coroutines
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# Koin
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-work-manager = { group = "io.insert-koin", name = "koin-workmanager", version.ref = "koin" }
+
+# Paging
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
+
+# Ktor
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktor" }
+ktor-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-navigation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
+ktor-client-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+
+# KotlinXSerialization
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinXSerializationPlugin" }
+
+# Coil
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+# Google Play Services
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
+# Osm Android
+osm-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmAndroid" }
+osm-bonus-pack = { group = "com.github.MKergall", name = "osmbonuspack", version.ref = "osmBonusPack" }
+
+
+[bundles]
+androidX = ["androidx-core-ktx", "androidx-appcompat"]
+compose = ["androidx-compose-bom" , "navigation-compose", "androidx-core-ktx", "androidx-activity-compose", "androidx-lifecycle-runtime-ktx", "androidx-ui", "compose-runtime", "androidx-ui-graphics", "androidx-ui-tooling", "material","accompanist_permissions","accompanist-inset"]
+dataStore = ["preferences-data-store"]
+splashApi = ["splash-api"]
+pagingRunTime = ["paging-runtime"]
+pagingCompose = ["paging-compose"]
+playServicesLocation = ["play-services-location"]
+osmAndroid = ["osm-android", "osm-bonus-pack"]
+koin = ["koin-android", "koin-compose", "koin-core"]
+kotlinCoroutines = ["coroutines"]
+ktor = ["ktor-android", "ktor-core", "ktor-auth", "ktor-logging", "ktor-navigation", "ktor-client-serialization", "ktor-client-serialization-json"]
+coil = ["coil"]
+test = ["junit","androidx-junit","androidx-espresso-core"]
+kotlinx-serialization = ["kotlinx-serialization"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+serialization = {id = "org.jetbrains.kotlin.plugin.serialization",version.ref = "kotlinXSerializationPlugin" }
 
+# ruzmozd plugins
+ruzmozdprovider-android-application = { id = "ruzmozdprovider.android.application", version = "unspecified" }
+ruzmozdprovider-android-library-compose = { id = "ruzmozdprovider.android.library.compose", version = "unspecified" }
+ruzmozdprovider-android-library = { id = "ruzmozdprovider.android.library", version = "unspecified" }
