@@ -30,7 +30,7 @@
             android:name="ir.hirkancorp.ruzmozdprovider.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RuzmozdProvider">
+            android:theme="@style/RuzmozdSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
