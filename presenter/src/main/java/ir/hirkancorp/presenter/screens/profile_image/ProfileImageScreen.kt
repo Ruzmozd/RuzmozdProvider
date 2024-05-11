@@ -39,7 +39,8 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileImageScreen(
-    viewModel: ProfileImageViewModel = koinViewModel()
+    viewModel: ProfileImageViewModel = koinViewModel(),
+    onNextClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val spacing = LocalSpacing.current
@@ -122,7 +123,8 @@ fun ProfileImageScreen(
                 Button(
                     enabled = state.success.asString().isNotBlank(),
                     modifier = Modifier.width(200.dp),
-                    text = stringResource(R.string.profileImage_screen_continueButton)
+                    text = stringResource(R.string.profileImage_screen_continueButton),
+                    onClick = onNextClick
                 )
             }
         }

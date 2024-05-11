@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
 import ir.hirkancorp.data.common.api_utils.commonRequest
 import ir.hirkancorp.data.common.model.HttpResponseModel
+import ir.hirkancorp.data.common.static_data.TempDataRepository
 import ir.hirkancorp.data.preferences.repository.LocalServiceRepository
 import ir.hirkancorp.data.register.mapper.toDomain
 import ir.hirkancorp.data.register.model.CityListData
@@ -17,12 +18,14 @@ import ir.hirkancorp.domain.register.model.UserRegister
 import ir.hirkancorp.domain.register.model.UserRegisterResult
 import ir.hirkancorp.domain.register.repository.RegisterRepository
 import ir.hirkancorp.domain.utils.ApiResult
+import ir.hirkancorp.domain.utils.Constants.TEMP_DATA_NATIONAL_CODE
 import kotlinx.coroutines.flow.Flow
 
 
 class RegisterRepositoryImpl(
     private val client: RegisterClient,
-    private val localServiceRepository: LocalServiceRepository
+    private val localServiceRepository: LocalServiceRepository,
+    private val tempDataRepository : TempDataRepository<String>
 ) : RegisterRepository {
 
     override suspend fun register(user: UserRegister): Flow<ApiResult<UserRegisterResult>> =
@@ -48,6 +51,10 @@ class RegisterRepositoryImpl(
             cityListData.data.cities.toDomain()
         }
     )
+
+    override suspend fun tempSaveNationalCode(nationalCode: String) {
+        tempDataRepository.saveData(TEMP_DATA_NATIONAL_CODE, nationalCode)
+    }
 
     private suspend fun saveAccessToken(accessToken: String) {
         localServiceRepository.saveAccessToken(accessToken)

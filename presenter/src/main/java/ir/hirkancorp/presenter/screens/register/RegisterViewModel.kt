@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.domain.register.model.UserRegister
 import ir.hirkancorp.domain.register.use_cases.RegisterUserUseCase
+import ir.hirkancorp.domain.register.use_cases.TempSaveNationalCodeUseCase
 import ir.hirkancorp.domain.utils.ApiResult
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.utils.UiText.DynamicString
@@ -15,7 +16,10 @@ import ir.hirkancorp.presenter.core.utils.or
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
-class RegisterViewModel(private val registerUserUseCase: RegisterUserUseCase) : ViewModel(),
+class RegisterViewModel(
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val tempSaveNationalCodeUseCase: TempSaveNationalCodeUseCase
+) : ViewModel(),
     KoinComponent {
 
     var state by mutableStateOf(RegisterState())
@@ -77,6 +81,9 @@ class RegisterViewModel(private val registerUserUseCase: RegisterUserUseCase) : 
         )
 
         viewModelScope.launch {
+
+            tempSaveNationalCodeUseCase(state.nationalCode)
+
             registerUserUseCase.invoke(user).collect { result ->
                 state = when (result) {
                     is ApiResult.Loading -> state.copy(

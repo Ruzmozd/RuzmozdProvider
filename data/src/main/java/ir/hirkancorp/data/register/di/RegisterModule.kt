@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val registerModule = module {
     single { RegisterClient(get()) }
-    single<RegisterRepository> { RegisterRepositoryImpl(get(), get()) }
+    single<RegisterRepository> { RegisterRepositoryImpl(get(), get(), get()) }
 }

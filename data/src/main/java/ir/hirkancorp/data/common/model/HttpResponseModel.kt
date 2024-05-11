@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HttpResponseModel<T>(
     @SerialName("success")
-    var success: Boolean = false,
+    val success: Boolean = false,
     @SerialName("status_code")
-    var statusCode: Int = 0,
+    val statusCode: Int = 0,
     @SerialName("status_message")
-    var statusMessage: String = "",
+    val statusMessage: String = "",
     @SerialName("data")
-    var data: T,
+    val data: T,
 )

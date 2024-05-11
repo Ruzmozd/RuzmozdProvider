@@ -12,4 +12,5 @@ interface RegisterRepository {
 
     suspend fun getCities(): Flow<ApiResult<List<City>>>
 
+    suspend fun tempSaveNationalCode(nationalCode:String)
 }

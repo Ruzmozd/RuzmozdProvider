@@ -5,6 +5,7 @@ import ir.hirkancorp.data.logout.di.logOutModule
 import ir.hirkancorp.data.preferences.di.preferencesModule
 import ir.hirkancorp.data.profile_image.di.profileImageModule
 import ir.hirkancorp.data.register.di.registerModule
+import ir.hirkancorp.data.upload_document.di.uploadDocumentModule
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -14,6 +15,7 @@ val dataModule = module {
         loginModule,
         logOutModule,
         profileImageModule,
-        registerModule
+        registerModule,
+        uploadDocumentModule
     )
 }

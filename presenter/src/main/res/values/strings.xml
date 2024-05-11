@@ -85,4 +85,9 @@
     <string name="provider_detail_screen_working_time">زمان همکاری</string>
     <string name="provider_detail_screen_hour">ساعت</string>
     <string name="provider_detail_screen_day">روز</string>
+    <string name="upload_document_screen_nationality_code">شناسه ملی:</string>
+    <string name="upload_document_screen_documents">مدارک</string>
+    <string name="upload_document_screen_national_residence_image">تصویر کارت ملی / کارت اقامت</string>
+    <string name="upload_document_cancel">بی خیال</string>
+    <string name="upload_document_continue">تایید و ادامه</string>
 </resources>

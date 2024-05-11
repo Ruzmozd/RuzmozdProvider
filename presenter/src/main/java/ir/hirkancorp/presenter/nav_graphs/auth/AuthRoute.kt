@@ -17,4 +17,5 @@ sealed class AuthRoute(val route: String) {
         fun createRoute(token: String?) = "profileImage/$token"
     }
 
+    data object UploadDocument: AuthRoute(route = "upload_document")
 }
