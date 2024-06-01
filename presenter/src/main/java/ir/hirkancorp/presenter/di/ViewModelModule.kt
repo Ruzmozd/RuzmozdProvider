@@ -1,6 +1,7 @@
 package ir.hirkancorp.presenter.di
 
 import ir.hirkancorp.presenter.screens.login.LoginViewModel
+import ir.hirkancorp.presenter.screens.main.MainViewModel
 import ir.hirkancorp.presenter.screens.profile_image.ProfileImageViewModel
 import ir.hirkancorp.presenter.screens.register.RegisterViewModel
 import ir.hirkancorp.presenter.screens.upload_document.UploadDocumentViewModel
@@ -12,4 +13,5 @@ val viewModelModule = module {
     viewModel { RegisterViewModel(get(), get()) }
     viewModel { UploadDocumentViewModel(get(), get()) }
     viewModel { ProfileImageViewModel(get()) }
+    viewModel { MainViewModel(get()) }
 }

@@ -8,9 +8,8 @@ import androidx.navigation.compose.composable
 import ir.hirkancorp.presenter.nav_graphs.Graphs
 import ir.hirkancorp.presenter.nav_graphs.auth.authNav
 import ir.hirkancorp.presenter.nav_graphs.settings.settingsNav
-import ir.hirkancorp.presenter.screens.map.MainScreen
+import ir.hirkancorp.presenter.screens.main.MainScreen
 import ir.hirkancorp.presenter.screens.requests.RequestsScreen
-import ir.hirkancorp.presenter.screens.requests.SettingsScreen
 
 @Composable
 fun MainNavGraph(
@@ -24,7 +23,14 @@ fun MainNavGraph(
         startDestination = MainScreens.MainScreen.route
     ) {
         composable(route = MainScreens.MainScreen.route) {
-            MainScreen()
+            MainScreen(
+                navigateToLoginScreen = {
+                    navHostController.run {
+                        popBackStack()
+                        navigate(Graphs.AUTH)
+                    }
+                }
+            )
         }
         composable(route = MainScreens.RequestsScreen.route) {
             RequestsScreen()
