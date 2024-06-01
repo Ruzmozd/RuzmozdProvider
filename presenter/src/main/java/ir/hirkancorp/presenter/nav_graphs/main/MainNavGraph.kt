@@ -29,9 +29,6 @@ fun MainNavGraph(
         composable(route = MainScreens.RequestsScreen.route) {
             RequestsScreen()
         }
-        composable(route = MainScreens.SettingsScreen.route) {
-            SettingsScreen()
-        }
         settingsNav(navHostController)
         authNav(navHostController)
     }
