@@ -5,8 +5,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import ir.hirkancorp.presenter.nav_graphs.Graphs
-import ir.hirkancorp.presenter.nav_graphs.auth.AuthRoute.*
-import ir.hirkancorp.presenter.nav_graphs.home.HomeRoute
+import ir.hirkancorp.presenter.nav_graphs.auth.AuthRoute.Login
+import ir.hirkancorp.presenter.nav_graphs.auth.AuthRoute.ProfileImage
+import ir.hirkancorp.presenter.nav_graphs.auth.AuthRoute.Register
+import ir.hirkancorp.presenter.nav_graphs.auth.AuthRoute.UploadDocument
+import ir.hirkancorp.presenter.nav_graphs.main.MainScreens
 import ir.hirkancorp.presenter.screens.login.LoginScreen
 import ir.hirkancorp.presenter.screens.profile_image.ProfileImageScreen
 import ir.hirkancorp.presenter.screens.register.RegisterScreen
@@ -22,7 +25,7 @@ fun NavGraphBuilder.authNav(navHostController: NavHostController) {
                 navigateToRegisterScreen = { phoneNumber ->
                     navHostController.navigate(Register.createRoute(phoneNumber))
                 },
-                navigateToMainScreen = { navHostController.navigate(HomeRoute.Home.route) }
+                navigateToMainScreen = { navHostController.navigate(MainScreens.MainScreen.route) }
             )
         }
         composable(route = Register.route) { navBackStackEntity ->
@@ -40,7 +43,7 @@ fun NavGraphBuilder.authNav(navHostController: NavHostController) {
         }
         composable(route = UploadDocument.route) {
             UploadDocumentScreen {
-                navHostController.navigate(HomeRoute.Home.route)
+                navHostController.navigate(MainScreens.MainScreen.route)
             }
         }
     }

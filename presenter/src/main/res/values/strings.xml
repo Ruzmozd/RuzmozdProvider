@@ -31,7 +31,7 @@
     <string name="profileImage_screen_selectImageDialog_dismissButton_openCamera">باز کردن دوربین</string>
     <string name="profileImage_screen_continueButton">تایید و ادامه</string>
     <string name="providersViewModel_addressNotFound">آدرس یافت نشد!</string>
-    <string name="app_name">روزمزد</string>
+    <string name="app_name">روزمزد کارگر</string>
     <string name="providers_screen_top_app_bar_title">کارگران</string>
     <string name="providers_screen_missed_location_error_page_content">جهت نمایش کارگران اطراف شما دسترسی به موقعیت مکانی را از تنظیمات اپلیکیشن روزمزد مجاز کنید</string>
     <string name="providers_screen_missed_location_dialog_content">جهت نمایش کارگران اطراف شما دسترسی به موقعیت مکانی را مجاز کنید</string>

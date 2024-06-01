@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import ir.hirkancorp.presenter.core.theme.RuzmozdProviderTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
+import ir.hirkancorp.presenter.core.components.RuzmozdBottomAppBar
 import ir.hirkancorp.presenter.nav_graphs.main.MainNavGraph
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +32,13 @@ class MainActivity : ComponentActivity() {
             ) {
                 RuzmozdProviderTheme {
                     Scaffold(
-
+                        bottomBar = {
+                            RuzmozdBottomAppBar(
+                                modifier = Modifier
+                                    .navigationBarsWithImePadding(),
+                                navController = navController
+                            )
+                        }
                     ){ padding ->
                         Surface(
                             modifier = Modifier
