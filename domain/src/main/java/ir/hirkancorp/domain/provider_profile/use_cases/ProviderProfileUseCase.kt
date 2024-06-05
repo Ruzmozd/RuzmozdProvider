@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 class ProviderProfileUseCase(private val providerProfileRepository: ProviderProfileRepository) {
 
     suspend operator fun invoke(
-        firstName: String?,
-        lastName: String?,
-        city: Int?,
-        profileImage: ByteArray?
+        firstName: String? = null,
+        lastName: String? = null,
+        city: Int? = null,
+        profileImage: ByteArray? = null
     ): Flow<ApiResult<ProviderProfile>> = providerProfileRepository.providerProfile(
         firstName = firstName,
         lastName = lastName,

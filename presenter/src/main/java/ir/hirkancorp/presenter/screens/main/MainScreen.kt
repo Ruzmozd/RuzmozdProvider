@@ -14,6 +14,7 @@ import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.ErrorPage
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
+import ir.hirkancorp.presenter.core.utils.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -37,6 +38,7 @@ fun MainScreen(
             onEvent(MainScreenEvent.CheckIfAuthenticate)
             authChannel.collectLatest {
                 if (it.not()) navigateToLoginScreen()
+                else onEvent(MainScreenEvent.GetProviderProfile)
             }
         }
     }
