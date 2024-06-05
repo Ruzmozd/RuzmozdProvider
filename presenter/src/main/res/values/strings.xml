@@ -90,4 +90,6 @@
     <string name="upload_document_screen_national_residence_image">تصویر کارت ملی / کارت اقامت</string>
     <string name="upload_document_cancel">بی خیال</string>
     <string name="upload_document_continue">تایید و ادامه</string>
+    <string name="main_screen_provider_info_completed_jobs">خدمات انجام شده: %1$s</string>
+    <string name="main_screen_provider_info_pending_jobs">خدمات تکمیل نشده: %1$s</string>
 </resources>
