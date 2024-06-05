@@ -13,8 +13,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 fun PermissionComponent(
     requiredPermissions: List<String> = emptyList(),
     onPermissionGranted: () -> Unit,
-    onPermissionDenied: () -> Unit,
-    onPermissionsRevoked: () -> Unit
+    onPermissionDenied: (permissions: List<String>) -> Unit,
+    onPermissionsRevoked: (permissions: List<String>) -> Unit
 ) {
 
     val permissionState = rememberMultiplePermissionsState(permissions = requiredPermissions)
@@ -45,12 +45,14 @@ fun PermissionComponent(
         }
 
         if (revokedPermissions) {
-            onPermissionsRevoked()
+            onPermissionsRevoked(permissionState.revokedPermissions.map { it.permission })
         } else {
             if (permissionState.allPermissionsGranted) {
+                val permissions = permissionsToRequest.map { it.permission}
                 onPermissionGranted()
             } else {
-                onPermissionDenied()
+                val permissions = permissionsToRequest.map { it.permission }
+                onPermissionDenied(permissions)
             }
         }
 
