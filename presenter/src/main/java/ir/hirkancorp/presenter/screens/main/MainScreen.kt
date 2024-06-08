@@ -66,13 +66,19 @@ fun MainScreen(
             viewModel.onEvent(MainScreenEvent.UpdateLocation)
         },
         onPermissionDenied = { permissions ->
-            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            ) {
                 viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
                 viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
             }
         },
         onPermissionsRevoked = { permissions ->
-            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            ) {
                 viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
                 viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
             }
@@ -85,7 +91,13 @@ fun MainScreen(
             content = stringResource(R.string.main_screen_location_error_dialog_content),
             submitButtonText = stringResource(id = R.string.all_submit),
             dismissOnClickOutside = false,
-            onConfirmation = { viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false)) }
+            onConfirmation = {
+                viewModel.onEvent(
+                    MainScreenEvent.HandleMissedLocationPermission(
+                        false
+                    )
+                )
+            }
         )
     }
 
@@ -94,8 +106,8 @@ fun MainScreen(
     ) { paddingValues ->
         Box(
             modifier = Modifier
-                .padding(paddingValues)
                 .fillMaxSize()
+                .padding(paddingValues)
         ) {
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
@@ -132,13 +144,13 @@ fun MainScreen(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 profileState = state.profileState
             )
-//            when {
-//                state.missedLocationPermission -> ErrorPage(
-//                    errorMessage = stringResource(
-//                        R.string.main_screen_missed_location_error_page_content
-//                    )
-//                )
-//            }
+            //            when {
+            //                state.missedLocationPermission -> ErrorPage(
+            //                    errorMessage = stringResource(
+            //                        R.string.main_screen_missed_location_error_page_content
+            //                    )
+            //                )
+            //            }
         }
     }
 }
