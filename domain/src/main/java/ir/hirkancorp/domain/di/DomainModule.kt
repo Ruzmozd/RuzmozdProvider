@@ -5,6 +5,7 @@ import ir.hirkancorp.domain.login.di.loginUseCaseModule
 import ir.hirkancorp.domain.logout.di.logOutModule
 import ir.hirkancorp.domain.profile_image.di.profileImageUseCaseModule
 import ir.hirkancorp.domain.provider_profile.di.providerProfileModule
+import ir.hirkancorp.domain.provider_status.di.providerStatusModule
 import ir.hirkancorp.domain.register.di.registerUserUseCaseModule
 import ir.hirkancorp.domain.upload_document.di.uploadDocumentUseCaseModule
 import org.koin.dsl.module
@@ -17,6 +18,7 @@ val domainModule = module {
         registerUserUseCaseModule,
         uploadDocumentUseCaseModule,
         authModule,
-        providerProfileModule
+        providerProfileModule,
+        providerStatusModule
     )
 }
