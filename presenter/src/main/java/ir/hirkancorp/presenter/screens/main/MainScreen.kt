@@ -1,9 +1,7 @@
 package ir.hirkancorp.presenter.screens.main
 
 import android.Manifest
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,15 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.hirkancorp.presenter.R
-import ir.hirkancorp.presenter.core.components.ErrorPage
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
-import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.components.ProviderInfoCard
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -109,6 +104,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
                 factory = { context ->
@@ -118,8 +114,8 @@ fun MainScreen(
                         setMultiTouchControls(true)
                         zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
                         controller.setCenter(mapCenterPoint)
-                        controller.setZoom(16.0)
-                        maxZoomLevel = 22.0
+                        controller.setZoom(8.0)
+                        maxZoomLevel = 20.0
                         addMapListener(object : MapListener {
                             override fun onScroll(event: ScrollEvent?): Boolean {
                                 event?.source?.mapCenter?.let {

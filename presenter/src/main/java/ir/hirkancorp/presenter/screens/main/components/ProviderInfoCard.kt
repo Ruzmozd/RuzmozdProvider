@@ -1,5 +1,6 @@
 package ir.hirkancorp.presenter.screens.main.components
 
+import AnimatedSwitch
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,10 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -101,7 +106,7 @@ private fun ProviderInfo(
             .padding(16.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             CircularImage(
                 modifier = Modifier.size(60.dp),
@@ -147,6 +152,16 @@ private fun ProviderInfo(
                         )
                     }
                 }
+            }
+            var state by remember {
+                mutableStateOf(true)
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            AnimatedSwitch(
+                modifier = Modifier.width(80.dp).height(40.dp),
+                checked = state
+            ) {
+                state = it
             }
         }
     }
