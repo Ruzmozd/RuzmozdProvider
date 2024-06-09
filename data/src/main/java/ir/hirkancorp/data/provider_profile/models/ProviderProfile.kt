@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProviderProfile(
     @SerialName("provider_profile")
-    val providerProfile: ProviderProfileX = ProviderProfileX()
+    val providerProfileData: ProviderProfileData = ProviderProfileData()
 )

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
@@ -174,6 +175,7 @@ fun MainScreen(
                     modifier = Modifier
                         .width(80.dp)
                         .height(40.dp),
+                    enabled = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.status == ProviderStatusEnum.ACTIVE,
                     isLoading = state.providerStatus is ProviderStatus.Loading,
                     checked = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true
                 ) { viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(it)) }

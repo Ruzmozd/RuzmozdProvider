@@ -33,7 +33,7 @@ class ProviderProfileRepositoryImpl(private val providerProfileRemote: ProviderP
         },
         errorCodes = listOf(Unauthorized, Forbidden, NotFound),
         successAction = Pair(OK) { response ->
-            response.body<HttpResponseModel<ProviderProfileData>>().data.providerProfile.toDomain()
+            response.body<HttpResponseModel<ProviderProfileData>>().data.providerProfileData.toDomain()
         }
 
     )

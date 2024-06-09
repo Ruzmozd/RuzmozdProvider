@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -20,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +35,7 @@ import kotlin.math.roundToInt
 @Composable
 fun AnimatedSwitch(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     isLoading: Boolean = false,
     checked: Boolean = false,
     onCheckedChange: (checked: Boolean) -> Unit
@@ -53,7 +57,7 @@ fun AnimatedSwitch(
         modifier = modifier
             .onGloballyPositioned { layoutCoordinates -> size = layoutCoordinates.size }
             .clip(RoundedCornerShape(percent = 50))
-            .clickable { onCheckedChange(!checked) }
+            .clickable { if (enabled) onCheckedChange(!checked) }
             .border(2.dp, SolidColor(color), shape = RoundedCornerShape(percent = 50)),
         contentAlignment = Alignment.Center
     ) {
@@ -77,6 +81,13 @@ fun AnimatedSwitch(
                 color = MaterialTheme.colors.onPrimary
             )
         }
+        if (!enabled) Box(
+            modifier = modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(percent = 50))
+                .background(Color.Gray.copy(alpha = .3f))
+                .border(2.dp, SolidColor(color), shape = RoundedCornerShape(percent = 50)),
+        ) {}
     }
 }
 

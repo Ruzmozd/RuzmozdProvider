@@ -1,11 +1,12 @@
 package ir.hirkancorp.data.provider_profile.mapper
 
 import ir.hirkancorp.data.provider_profile.models.Location
-import ir.hirkancorp.data.provider_profile.models.ProviderProfileX
+import ir.hirkancorp.data.provider_profile.models.ProviderProfileData
 import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum
 import ir.hirkancorp.domain.provider_profile.models.Location as LocationDomain
 
-fun ProviderProfileX.toDomain(): ProviderProfile = ProviderProfile(
+fun ProviderProfileData.toDomain(): ProviderProfile = ProviderProfile(
     checkedProviderAvailability = checkedProviderAvailability,
     checkedProviderServiceType = checkedProviderServiceType,
     city = city,
@@ -20,7 +21,7 @@ fun ProviderProfileX.toDomain(): ProviderProfile = ProviderProfile(
     pendingJobsCount = pendingJobsCount,
     profileImage = profileImage,
     serviceDescription = serviceDescription,
-    status = status
+    status =  status.toStatusEnum()
 
 )
 
@@ -30,3 +31,11 @@ private fun Location.toDomain(): LocationDomain = LocationDomain(
     workRadius = workRadius
 
 )
+
+fun String.toStatusEnum(): ProviderStatusEnum = when (this) {
+    "Active" -> ProviderStatusEnum.ACTIVE
+    "Inactive" -> ProviderStatusEnum.INACTIVE
+    "Pending" -> ProviderStatusEnum.PENDING
+    "rejected" -> ProviderStatusEnum.REJECTED
+    else ->  ProviderStatusEnum.INACTIVE
+}

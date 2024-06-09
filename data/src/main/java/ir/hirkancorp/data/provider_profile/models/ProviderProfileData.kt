@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProviderProfileX(
+data class ProviderProfileData(
     @SerialName("checked_provider_availability")
     val checkedProviderAvailability: Boolean = false,
     @SerialName("checked_provider_service_type")
@@ -34,5 +34,7 @@ data class ProviderProfileX(
     @SerialName("service_description")
     val serviceDescription: String = "",
     @SerialName("status")
-    val status: String = ""
+    val status: String = "",
+    @SerialName("status_description")
+    val statusDescription: String = ""
 )

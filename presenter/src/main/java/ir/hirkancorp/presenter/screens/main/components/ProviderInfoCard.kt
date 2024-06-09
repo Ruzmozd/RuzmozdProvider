@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ir.hirkancorp.domain.provider_profile.models.Location
 import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.Dimensions
 import ir.hirkancorp.presenter.core.LocalSpacing
@@ -227,7 +228,7 @@ val profile = ProviderProfile(
     pendingJobsCount = "۳",
     profileImage = "efficitur",
     serviceDescription = "سرویس دهنده و اطلاعات گیرنده",
-    status = "placerat"
+    status = ProviderStatusEnum.ACTIVE
 )
 
 @Preview

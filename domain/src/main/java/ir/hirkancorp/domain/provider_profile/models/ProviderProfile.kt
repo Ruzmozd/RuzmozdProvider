@@ -15,5 +15,12 @@ data class ProviderProfile(
     val pendingJobsCount: String = "",
     val profileImage: String = "",
     val serviceDescription: String = "",
-    val status: String = ""
+    val status: ProviderStatusEnum = ProviderStatusEnum.INACTIVE,
+    val statusDescription: String = ""
 )
+enum class ProviderStatusEnum {
+    ACTIVE,
+    INACTIVE,
+    PENDING,
+    REJECTED
+}
