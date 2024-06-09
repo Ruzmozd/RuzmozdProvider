@@ -153,16 +153,6 @@ private fun ProviderInfo(
                     }
                 }
             }
-            var state by remember {
-                mutableStateOf(true)
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            AnimatedSwitch(
-                modifier = Modifier.width(80.dp).height(40.dp),
-                checked = state
-            ) {
-                state = it
-            }
         }
     }
 }

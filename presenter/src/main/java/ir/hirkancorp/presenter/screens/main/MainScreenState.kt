@@ -8,7 +8,8 @@ data class MainScreenState(
     val locationErrorDialog: Boolean = false,
     val missedLocationPermissionDialog: Boolean = false,
     val missedLocationPermission: Boolean = false,
-    val profileState: ProviderProfileState = ProviderProfileState.Loading
+    val profileState: ProviderProfileState = ProviderProfileState.Loading,
+    val providerStatus: ProviderStatus = ProviderStatus.Idle
 )
 
 sealed class ProviderProfileState {
@@ -16,4 +17,11 @@ sealed class ProviderProfileState {
     data class Error(val message: String) : ProviderProfileState()
     data class Success(val providerProfile: ProviderProfile?) : ProviderProfileState()
 
+}
+
+sealed class ProviderStatus {
+    data object Idle : ProviderStatus()
+    data object Loading : ProviderStatus()
+    data class Error(val message: String) : ProviderStatus()
+    data object Success : ProviderStatus()
 }

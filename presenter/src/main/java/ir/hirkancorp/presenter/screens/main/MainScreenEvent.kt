@@ -7,5 +7,6 @@ sealed class MainScreenEvent {
     data class HandleMissedLocationPermissionError(val show: Boolean) : MainScreenEvent()
     data object UpdateLocation: MainScreenEvent()
     data object GetProviderProfile: MainScreenEvent()
+    data class UpdateProviderStatus(val isOnline: Boolean): MainScreenEvent()
 
 }

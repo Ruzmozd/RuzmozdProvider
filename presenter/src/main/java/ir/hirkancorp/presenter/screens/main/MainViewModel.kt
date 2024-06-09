@@ -6,11 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
+import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
+import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
-import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.CheckIfAuthenticate
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocationPermission
 import kotlinx.coroutines.channels.Channel
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val authUseCase: AuthUseCase,
-    private val providerProfileUseCase: ProviderProfileUseCase
+    private val providerProfileUseCase: ProviderProfileUseCase,
+    private val providerStatusUseCase: ProviderStatusUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MainScreenState())
@@ -34,7 +36,23 @@ class MainViewModel(
         is HandleMissedLocationPermission -> handleMissedLocationPermission(event.show)
         is MainScreenEvent.HandleMissedLocationPermissionError -> handleMissedLocationPermissionError(event.show)
         is MainScreenEvent.GetProviderProfile -> getProviderProfile()
+        is MainScreenEvent.UpdateProviderStatus -> updateProviderStatus(event.isOnline)
         MainScreenEvent.UpdateLocation -> updateLocation()
+    }
+
+    private fun updateProviderStatus(isOnline: Boolean) {
+        viewModelScope.launch {
+            providerStatusUseCase.invoke(isOnline).collect { result ->
+                when(result) {
+                    is Loading -> state = state.copy(providerStatus = ProviderStatus.Loading)
+                    is Success -> {
+                        state = state.copy(providerStatus = ProviderStatus.Success)
+                        onEvent(MainScreenEvent.GetProviderProfile)
+                    }
+                    is Error -> state =  state.copy(providerStatus = ProviderStatus.Error(result.message.orEmpty()))
+                }
+            }
+        }
     }
 
     private fun getProviderProfile() {
@@ -44,7 +62,7 @@ class MainViewModel(
                     profileState = when(result) {
                         is Error ->  ProviderProfileState.Error(result.message.orEmpty())
                         is Loading ->  ProviderProfileState.Loading
-                        is Success ->  ProviderProfileState.Success(result.data)
+                        is Success -> { ProviderProfileState.Success(result.data) }
                     }
                 )
             }

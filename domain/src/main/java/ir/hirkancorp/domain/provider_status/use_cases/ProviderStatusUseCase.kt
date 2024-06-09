@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 class ProviderStatusUseCase(private val providerStatusRepository: ProviderStatusRepository) {
 
-    suspend operator fun invoke(status: Int): Flow<ApiResult<Boolean>> = providerStatusRepository.updateStatus(status = status)
+    suspend operator fun invoke(status: Boolean): Flow<ApiResult<Boolean>>  {
+        val statusAsInt = if (status) 1 else 0
+        return providerStatusRepository.updateStatus(status = statusAsInt)
+    }
 
 }

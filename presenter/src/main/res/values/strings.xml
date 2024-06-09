@@ -92,4 +92,6 @@
     <string name="upload_document_continue">تایید و ادامه</string>
     <string name="main_screen_provider_info_completed_jobs">خدمات انجام شده: %1$s</string>
     <string name="main_screen_provider_info_pending_jobs">خدمات تکمیل نشده: %1$s</string>
+    <string name="main_screen_provider_state_text_offline">شما آفلاین هستید</string>
+    <string name="main_screen_provider_state_text_online">شما آنلاین هستید</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import kotlin.math.roundToInt
 @Composable
 fun AnimatedSwitch(
     modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
     checked: Boolean = false,
     onCheckedChange: (checked: Boolean) -> Unit
 ) {
@@ -48,10 +50,11 @@ fun AnimatedSwitch(
     )
 
     Box(
-        modifier = modifier.onGloballyPositioned { layoutCoordinates -> size = layoutCoordinates.size }
+        modifier = modifier
+            .onGloballyPositioned { layoutCoordinates -> size = layoutCoordinates.size }
             .clip(RoundedCornerShape(percent = 50))
             .clickable { onCheckedChange(!checked) }
-            .border(2.dp, SolidColor(color),shape = RoundedCornerShape(percent = 50)),
+            .border(2.dp, SolidColor(color), shape = RoundedCornerShape(percent = 50)),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -61,6 +64,19 @@ fun AnimatedSwitch(
                 .clip(RoundedCornerShape(percent = 50))
                 .background(color)
         )
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(((size.height / 4) - 4).dp)
+                    .offset {
+                        IntOffset(
+                            animatedOffset.x.roundToInt(),
+                            animatedOffset.y.roundToInt()
+                        )
+                    },
+                color = MaterialTheme.colors.onPrimary
+            )
+        }
     }
 }
 
@@ -69,7 +85,9 @@ fun AnimatedSwitch(
 private fun StateSwitchPreview() {
     RuzmozdProviderTheme {
         AnimatedSwitch(
-            modifier = Modifier.width(80.dp).height(50.dp),
+            modifier = Modifier
+                .width(80.dp)
+                .height(50.dp),
         ) {}
     }
 }
