@@ -17,10 +17,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +26,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
+import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
@@ -66,6 +65,23 @@ fun MainScreen(
             authChannel.collectLatest {
                 if (it.not()) navigateToLoginScreen()
                 else onEvent(MainScreenEvent.GetProviderProfile)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = state.profileState) {
+        if (state.profileState is ProviderProfileState.Success) {
+            when (state.profileState.providerProfile?.status) {
+                PENDING, REJECTED, INACTIVE -> {
+                    viewModel.onEvent(
+                        MainScreenEvent.ShowProviderStatusDialog(
+                            show = true,
+                            message = state.profileState.providerProfile.statusDescription
+                        )
+                    )
+                }
+
+                else -> {}
             }
         }
     }
@@ -111,7 +127,23 @@ fun MainScreen(
                 )
             }
         )
+
+        state.providerStatusDialog -> RuzmozdDialog(
+            title = stringResource(id = R.string.app_name),
+            content = state.providerStatusDialogMessage,
+            submitButtonText = stringResource(id = R.string.all_submit),
+            dismissOnClickOutside = false,
+            onConfirmation = {
+                viewModel.onEvent(
+                    MainScreenEvent.ShowProviderStatusDialog(
+                        show = false,
+                        message = ""
+                    )
+                )
+            }
+        )
     }
+
 
     Scaffold(
         modifier = modifier.fillMaxSize()

@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
-import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
@@ -37,7 +36,15 @@ class MainViewModel(
         is MainScreenEvent.HandleMissedLocationPermissionError -> handleMissedLocationPermissionError(event.show)
         is MainScreenEvent.GetProviderProfile -> getProviderProfile()
         is MainScreenEvent.UpdateProviderStatus -> updateProviderStatus(event.isOnline)
-        MainScreenEvent.UpdateLocation -> updateLocation()
+        is MainScreenEvent.UpdateLocation -> updateLocation()
+        is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
+    }
+
+    private fun showProviderStatusDialog(show: Boolean, message: String) {
+        state = state.copy(
+            providerStatusDialogMessage = message,
+            providerStatusDialog = show
+        )
     }
 
     private fun updateProviderStatus(isOnline: Boolean) {
