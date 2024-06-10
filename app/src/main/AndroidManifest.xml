@@ -49,6 +49,25 @@
                 android:resource="@xml/path_provider" />
         </provider>
 
+        <service android:name="ir.hirkancorp.presenter.core.firebaseMessaging.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="true" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/all_work" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/brand_yellow" />
+
     </application>
 
 </manifest>

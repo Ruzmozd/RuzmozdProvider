@@ -33,6 +33,9 @@ playServicesLocation = "21.2.0"
 osmAndroid = "6.1.18"
 osmBonusPack = "6.9.0"
 accompanistInsets = "0.23.1"
+firebaseMessaaging  = "24.0.0"
+firebaseAnalytics  = "22.0.0"
+googleServces = "4.4.2"
 
 [libraries]
 #androidX
@@ -106,6 +109,9 @@ play-services-location = { group = "com.google.android.gms", name = "play-servic
 osm-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmAndroid" }
 osm-bonus-pack = { group = "com.github.MKergall", name = "osmbonuspack", version.ref = "osmBonusPack" }
 
+# firebase
+google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaaging" }
+google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
 [bundles]
 androidX = ["androidx-core-ktx", "androidx-appcompat"]
@@ -122,14 +128,17 @@ ktor = ["ktor-android", "ktor-core", "ktor-auth", "ktor-logging", "ktor-navigati
 coil = ["coil"]
 test = ["junit","androidx-junit","androidx-espresso-core"]
 kotlinx-serialization = ["kotlinx-serialization"]
+firebase = ["google-firebase-messaging", "google-firebase-analytics"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 serialization = {id = "org.jetbrains.kotlin.plugin.serialization",version.ref = "kotlinXSerializationPlugin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServces" }
 
 # ruzmozd plugins
 ruzmozdprovider-android-application = { id = "ruzmozdprovider.android.application", version = "unspecified" }
 ruzmozdprovider-android-library-compose = { id = "ruzmozdprovider.android.library.compose", version = "unspecified" }
 ruzmozdprovider-android-library = { id = "ruzmozdprovider.android.library", version = "unspecified" }
+
