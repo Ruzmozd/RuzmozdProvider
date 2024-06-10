@@ -4,7 +4,7 @@ import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
 
 data class MainScreenState(
     val isLoadingAuth: Boolean = false,
-    val isAuthenticate: Boolean = true,
+    val isAuthenticate: Boolean = false,
     val locationErrorDialog: Boolean = false,
     val missedLocationPermissionDialog: Boolean = false,
     val missedLocationPermission: Boolean = false,

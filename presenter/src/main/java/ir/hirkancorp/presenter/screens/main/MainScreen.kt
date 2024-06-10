@@ -69,160 +69,172 @@ fun MainScreen(
         }
     }
 
-    LaunchedEffect(key1 = state.profileState) {
-        if (state.profileState is ProviderProfileState.Success) {
-            when (state.profileState.providerProfile?.status) {
-                PENDING, REJECTED, INACTIVE -> {
-                    viewModel.onEvent(
-                        MainScreenEvent.ShowProviderStatusDialog(
-                            show = true,
-                            message = state.profileState.providerProfile.statusDescription
-                        )
-                    )
-                }
-
-                else -> {}
-            }
-        }
-    }
-
-    PermissionComponent(
-        requiredPermissions = locationPermission,
-        onPermissionGranted = {
-            viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false))
-            viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(false))
-            viewModel.onEvent(MainScreenEvent.UpdateLocation)
-        },
-        onPermissionDenied = { permissions ->
-            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            ) {
-                viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
-                viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
-            }
-        },
-        onPermissionsRevoked = { permissions ->
-            if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            ) {
-                viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
-                viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
-            }
-        }
-    )
-
     when {
-        state.locationErrorDialog -> RuzmozdDialog(
-            title = stringResource(id = R.string.app_name),
-            content = stringResource(R.string.main_screen_location_error_dialog_content),
-            submitButtonText = stringResource(id = R.string.all_submit),
-            dismissOnClickOutside = false,
-            onConfirmation = {
-                viewModel.onEvent(
-                    MainScreenEvent.HandleMissedLocationPermission(
-                        false
-                    )
-                )
-            }
-        )
+        state.isLoadingAuth -> {}
+        state.isAuthenticate -> {
 
-        state.providerStatusDialog -> RuzmozdDialog(
-            title = stringResource(id = R.string.app_name),
-            content = state.providerStatusDialogMessage,
-            submitButtonText = stringResource(id = R.string.all_submit),
-            dismissOnClickOutside = false,
-            onConfirmation = {
-                viewModel.onEvent(
-                    MainScreenEvent.ShowProviderStatusDialog(
-                        show = false,
-                        message = ""
-                    )
-                )
-            }
-        )
-    }
-
-
-    Scaffold(
-        modifier = modifier.fillMaxSize()
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
-        ) {
-            AndroidView(
-                modifier = Modifier.fillMaxWidth(),
-                factory = { context ->
-                    val mapCenterPoint = GeoPoint(35.69944, 51.33778)
-                    val map = MapView(context).apply {
-                        setTileSource(TileSourceFactory.MAPNIK)
-                        setMultiTouchControls(true)
-                        zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
-                        controller.setCenter(mapCenterPoint)
-                        controller.setZoom(8.0)
-                        maxZoomLevel = 20.0
-                        addMapListener(object : MapListener {
-                            override fun onScroll(event: ScrollEvent?): Boolean {
-                                event?.source?.mapCenter?.let {
-                                    val lat = it.latitude
-                                    val lng = it.longitude
-                                }
-                                return false
-                            }
-
-                            override fun onZoom(event: ZoomEvent?): Boolean {
-                                return true
-                            }
-
-                        })
+            PermissionComponent(
+                requiredPermissions = locationPermission,
+                onPermissionGranted = {
+                    viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false))
+                    viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(false))
+                    viewModel.onEvent(MainScreenEvent.UpdateLocation)
+                },
+                onPermissionDenied = { permissions ->
+                    if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    ) {
+                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
+                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
                     }
-                    Configuration.getInstance().userAgentValue =
-                        System.currentTimeMillis().toString()
-                    map
+                },
+                onPermissionsRevoked = { permissions ->
+                    if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    ) {
+                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
+                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
+                    }
                 }
             )
-            Row(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(percent = 50), clip = true)
-                    .clip(RoundedCornerShape(percent = 50))
-                    .background(MaterialTheme.colors.surface)
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = if (state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true) stringResource(
-                        R.string.main_screen_provider_state_text_online
-                    )
-                    else stringResource(R.string.main_screen_provider_state_text_offline)
-                )
-                AnimatedSwitch(
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(40.dp),
-                    enabled = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.status == ProviderStatusEnum.ACTIVE,
-                    isLoading = state.providerStatus is ProviderStatus.Loading,
-                    checked = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true
-                ) { viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(it)) }
+
+            LaunchedEffect(key1 = state.profileState) {
+                if (state.profileState is ProviderProfileState.Success) {
+                    when (state.profileState.providerProfile?.status) {
+                        PENDING, REJECTED, INACTIVE -> {
+                            viewModel.onEvent(
+                                MainScreenEvent.ShowProviderStatusDialog(
+                                    show = true,
+                                    message = state.profileState.providerProfile.statusDescription
+                                )
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
             }
-            ProviderInfoCard(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                profileState = state.profileState
-            )
-            //            when {
-            //                state.missedLocationPermission -> ErrorPage(
-            //                    errorMessage = stringResource(
-            //                        R.string.main_screen_missed_location_error_page_content
-            //                    )
-            //                )
-            //            }
+
+            when {
+                state.locationErrorDialog -> RuzmozdDialog(
+                    title = stringResource(id = R.string.app_name),
+                    content = stringResource(R.string.main_screen_location_error_dialog_content),
+                    submitButtonText = stringResource(id = R.string.all_submit),
+                    dismissOnClickOutside = false,
+                    onConfirmation = {
+                        viewModel.onEvent(
+                            MainScreenEvent.HandleMissedLocationPermission(
+                                false
+                            )
+                        )
+                    }
+                )
+
+                state.providerStatusDialog -> RuzmozdDialog(
+                    title = stringResource(id = R.string.app_name),
+                    content = state.providerStatusDialogMessage,
+                    submitButtonText = stringResource(id = R.string.all_submit),
+                    dismissOnClickOutside = false,
+                    onConfirmation = {
+                        viewModel.onEvent(
+                            MainScreenEvent.ShowProviderStatusDialog(
+                                show = false,
+                                message = ""
+                            )
+                        )
+                    }
+                )
+            }
+
+
+            Scaffold(
+                modifier = modifier.fillMaxSize()
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AndroidView(
+                        modifier = Modifier.fillMaxWidth(),
+                        factory = { context ->
+                            val mapCenterPoint = GeoPoint(35.69944, 51.33778)
+                            val map = MapView(context).apply {
+                                setTileSource(TileSourceFactory.MAPNIK)
+                                setMultiTouchControls(true)
+                                zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
+                                controller.setCenter(mapCenterPoint)
+                                controller.setZoom(8.0)
+                                maxZoomLevel = 20.0
+                                addMapListener(object : MapListener {
+                                    override fun onScroll(event: ScrollEvent?): Boolean {
+                                        event?.source?.mapCenter?.let {
+                                            val lat = it.latitude
+                                            val lng = it.longitude
+                                        }
+                                        return false
+                                    }
+
+                                    override fun onZoom(event: ZoomEvent?): Boolean {
+                                        return true
+                                    }
+
+                                })
+                            }
+                            Configuration.getInstance().userAgentValue =
+                                System.currentTimeMillis().toString()
+                            map
+                        }
+                    )
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(percent = 50),
+                                clip = true
+                            )
+                            .clip(RoundedCornerShape(percent = 50))
+                            .background(MaterialTheme.colors.surface)
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = if (state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true) stringResource(
+                                R.string.main_screen_provider_state_text_online
+                            )
+                            else stringResource(R.string.main_screen_provider_state_text_offline)
+                        )
+                        AnimatedSwitch(
+                            modifier = Modifier
+                                .width(80.dp)
+                                .height(40.dp),
+                            enabled = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.status == ProviderStatusEnum.ACTIVE,
+                            isLoading = state.providerStatus is ProviderStatus.Loading,
+                            checked = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true
+                        ) { viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(it)) }
+                    }
+                    ProviderInfoCard(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        profileState = state.profileState
+                    )
+                    //            when {
+                    //                state.missedLocationPermission -> ErrorPage(
+                    //                    errorMessage = stringResource(
+                    //                        R.string.main_screen_missed_location_error_page_content
+                    //                    )
+                    //                )
+                    //            }
+                }
+            }
         }
     }
+
+
 }
