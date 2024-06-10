@@ -42,7 +42,7 @@ fun RuzmozdBottomAppBar(
 
     val screens = listOf(
         BottomNavigationScreens.MainScreen(
-            screenTitle = stringResource(id = R.string.app_name),
+            screenTitle = stringResource(id = R.string.main_screen_provider),
             screenIcon = Icons.Outlined.Home
         ),
         BottomNavigationScreens.RequestScreen(
