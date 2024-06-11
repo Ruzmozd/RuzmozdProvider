@@ -7,6 +7,7 @@ import ir.hirkancorp.domain.profile_image.di.profileImageUseCaseModule
 import ir.hirkancorp.domain.provider_profile.di.providerProfileModule
 import ir.hirkancorp.domain.provider_status.di.providerStatusModule
 import ir.hirkancorp.domain.register.di.registerUserUseCaseModule
+import ir.hirkancorp.domain.update_device.di.updateDeviceModule
 import ir.hirkancorp.domain.upload_document.di.uploadDocumentUseCaseModule
 import org.koin.dsl.module
 
@@ -19,6 +20,7 @@ val domainModule = module {
         uploadDocumentUseCaseModule,
         authModule,
         providerProfileModule,
-        providerStatusModule
+        providerStatusModule,
+        updateDeviceModule
     )
 }
