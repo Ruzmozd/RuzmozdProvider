@@ -1,4 +1,4 @@
-package ir.hirkancorp.ruzmozdprovider
+package ir.hirkancorp.provider
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package ir.hirkancorp.ruzmozdprovider
+package ir.hirkancorp.provider
 
 import android.app.Application
 import ir.hirkancorp.data.common.di.dataModule

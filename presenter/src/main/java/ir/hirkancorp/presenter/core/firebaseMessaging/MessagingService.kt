@@ -4,7 +4,7 @@ package ir.hirkancorp.presenter.core.firebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import ir.hirkancorp.core.LoggerUtil
-import ir.hirkancorp.presenter.core.firebaseMessaging.NotificationConstants.TYPE
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.component.KoinComponent

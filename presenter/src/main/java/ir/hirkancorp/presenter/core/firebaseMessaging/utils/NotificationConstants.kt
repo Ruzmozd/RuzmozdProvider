@@ -1,4 +1,4 @@
-package ir.hirkancorp.presenter.core.firebaseMessaging
+package ir.hirkancorp.presenter.core.firebaseMessaging.utils
 
 object NotificationConstants {
 

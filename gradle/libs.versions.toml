@@ -34,8 +34,8 @@ osmAndroid = "6.1.18"
 osmBonusPack = "6.9.0"
 accompanistInsets = "0.23.1"
 firebaseMessaaging  = "24.0.0"
-firebaseAnalytics  = "22.0.0"
-googleServces = "4.4.2"
+firebaseAnalytics  = "22.0.1"
+googleServces = "4.4.1"
 
 [libraries]
 #androidX

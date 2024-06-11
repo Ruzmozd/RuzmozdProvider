@@ -1,38 +1,30 @@
 package ir.hirkancorp.presenter.screens.main
 
-import AnimatedSwitch
 import android.Manifest
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
 import ir.hirkancorp.presenter.screens.main.components.ProviderInfoCard
+import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponent
+import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponentLoading
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.osmdroid.config.Configuration
@@ -64,8 +56,19 @@ fun MainScreen(
             onEvent(MainScreenEvent.CheckIfAuthenticate)
             authChannel.collectLatest {
                 if (it.not()) navigateToLoginScreen()
-                else onEvent(MainScreenEvent.GetProviderProfile)
+                else {
+                    onEvent(MainScreenEvent.GetProviderProfile)
+                    FirebaseUtils.getFirebaseToken { deviceId ->
+                        onEvent(MainScreenEvent.UpdateDevice(deviceId))
+                    }
+                }
             }
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.updateDeviceError.collectLatest {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -189,36 +192,14 @@ fun MainScreen(
                             map
                         }
                     )
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .shadow(
-                                elevation = 8.dp,
-                                shape = RoundedCornerShape(percent = 50),
-                                clip = true
-                            )
-                            .clip(RoundedCornerShape(percent = 50))
-                            .background(MaterialTheme.colors.surface)
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = if (state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true) stringResource(
-                                R.string.main_screen_provider_state_text_online
-                            )
-                            else stringResource(R.string.main_screen_provider_state_text_offline)
-                        )
-                        AnimatedSwitch(
-                            modifier = Modifier
-                                .width(80.dp)
-                                .height(40.dp),
-                            enabled = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.status == ProviderStatusEnum.ACTIVE,
-                            isLoading = state.providerStatus is ProviderStatus.Loading,
-                            checked = state.profileState is ProviderProfileState.Success && state.profileState.providerProfile?.isOnline == true
-                        ) { viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(it)) }
+                    Box(modifier = Modifier.align(Alignment.TopCenter)) {
+                        if (state.updateDeviceLoading)
+                            ProviderStateComponentLoading()
+                        else ProviderStateComponent(
+                            state = state,
+                            onCheckedChange = { checked ->
+                                viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(checked))
+                            })
                     }
                     ProviderInfoCard(
                         modifier = Modifier.align(Alignment.BottomCenter),

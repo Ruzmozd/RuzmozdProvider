@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
@@ -87,16 +88,17 @@ class MainViewModel(
     private fun updateDevice(deviceId: String) {
         viewModelScope.launch {
             updateDeviceUseCase.invoke(deviceId).collect { result ->
-                state = when(result) {
-                    is Loading -> state.copy(updateDeviceLoading = true)
+                LoggerUtil.logE("", result.toString())
+                when(result) {
                     is Success -> {
+                        state = state.copy(updateDeviceLoading = false)
                         result.data?.jobId?.let { _navigateToInProgressJobScreen.send(it) }
-                        state.copy(updateDeviceLoading = false)
                     }
                     is Error -> {
+                        state =  state.copy(updateDeviceLoading = false)
                         result.message?.let { _updateDeviceError.send(it) }
-                        state.copy(updateDeviceLoading = false)
                     }
+                    is Loading -> state = state.copy(updateDeviceLoading = true)
                 }
             }
         }
