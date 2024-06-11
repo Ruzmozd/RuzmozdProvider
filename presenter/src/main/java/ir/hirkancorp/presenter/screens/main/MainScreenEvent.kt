@@ -9,5 +9,6 @@ sealed class MainScreenEvent {
     data object GetProviderProfile: MainScreenEvent()
     data class UpdateProviderStatus(val isOnline: Boolean): MainScreenEvent()
     data class ShowProviderStatusDialog(val show: Boolean, val message: String): MainScreenEvent()
+    data class UpdateDevice(val deviceId: String): MainScreenEvent()
 
 }

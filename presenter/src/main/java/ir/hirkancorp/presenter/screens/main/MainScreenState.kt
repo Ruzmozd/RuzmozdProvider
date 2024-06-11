@@ -11,7 +11,8 @@ data class MainScreenState(
     val profileState: ProviderProfileState = ProviderProfileState.Loading,
     val providerStatus: ProviderStatus = ProviderStatus.Idle,
     val providerStatusDialogMessage: String = "",
-    val providerStatusDialog: Boolean = false
+    val providerStatusDialog: Boolean = false,
+    val updateDeviceLoading: Boolean = false
 )
 
 sealed class ProviderProfileState {

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
+import ir.hirkancorp.domain.update_device.use_cases.UpdateDeviceUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
@@ -20,7 +21,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val authUseCase: AuthUseCase,
     private val providerProfileUseCase: ProviderProfileUseCase,
-    private val providerStatusUseCase: ProviderStatusUseCase
+    private val providerStatusUseCase: ProviderStatusUseCase,
+    private val updateDeviceUseCase: UpdateDeviceUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MainScreenState())
@@ -29,6 +31,11 @@ class MainViewModel(
     private var _authChannel = Channel<Boolean>()
     var authChannel = _authChannel.receiveAsFlow()
 
+    private var _updateDeviceError = Channel<String>()
+    var updateDeviceError = _updateDeviceError.receiveAsFlow()
+
+    private var _navigateToInProgressJobScreen = Channel<Int>()
+    var navigateToInProgressJobScreen = _navigateToInProgressJobScreen.receiveAsFlow()
 
     fun onEvent(event: MainScreenEvent) = when(event) {
         is CheckIfAuthenticate -> isAuthenticate()
@@ -38,6 +45,7 @@ class MainViewModel(
         is MainScreenEvent.UpdateProviderStatus -> updateProviderStatus(event.isOnline)
         is MainScreenEvent.UpdateLocation -> updateLocation()
         is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
+        is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
     }
 
     private fun showProviderStatusDialog(show: Boolean, message: String) {
@@ -72,6 +80,24 @@ class MainViewModel(
                         is Success -> { ProviderProfileState.Success(result.data) }
                     }
                 )
+            }
+        }
+    }
+
+    private fun updateDevice(deviceId: String) {
+        viewModelScope.launch {
+            updateDeviceUseCase.invoke(deviceId).collect { result ->
+                state = when(result) {
+                    is Loading -> state.copy(updateDeviceLoading = true)
+                    is Success -> {
+                        result.data?.jobId?.let { _navigateToInProgressJobScreen.send(it) }
+                        state.copy(updateDeviceLoading = false)
+                    }
+                    is Error -> {
+                        result.message?.let { _updateDeviceError.send(it) }
+                        state.copy(updateDeviceLoading = false)
+                    }
+                }
             }
         }
     }
