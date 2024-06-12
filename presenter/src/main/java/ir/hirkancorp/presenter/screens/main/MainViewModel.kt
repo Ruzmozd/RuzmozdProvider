@@ -13,6 +13,8 @@ import ir.hirkancorp.domain.update_device.use_cases.UpdateDeviceUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
+import ir.hirkancorp.domain.work_radius.use_cases.UpdateWorkRadiusUseCase
+import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.CheckIfAuthenticate
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocationPermission
 import kotlinx.coroutines.channels.Channel
@@ -23,7 +25,8 @@ class MainViewModel(
     private val authUseCase: AuthUseCase,
     private val providerProfileUseCase: ProviderProfileUseCase,
     private val providerStatusUseCase: ProviderStatusUseCase,
-    private val updateDeviceUseCase: UpdateDeviceUseCase
+    private val updateDeviceUseCase: UpdateDeviceUseCase,
+    private val workRadiusUseCase: UpdateWorkRadiusUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MainScreenState())
@@ -31,6 +34,9 @@ class MainViewModel(
 
     private var _authChannel = Channel<Boolean>()
     var authChannel = _authChannel.receiveAsFlow()
+
+    private var _uiEvent = Channel<UiEvent>()
+    var uiEvent = _uiEvent.receiveAsFlow()
 
     private var _updateDeviceError = Channel<String>()
     var updateDeviceError = _updateDeviceError.receiveAsFlow()
@@ -47,6 +53,7 @@ class MainViewModel(
         is MainScreenEvent.UpdateLocation -> updateLocation()
         is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
         is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
+        is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
     }
 
     private fun showProviderStatusDialog(show: Boolean, message: String) {
@@ -99,6 +106,28 @@ class MainViewModel(
                         result.message?.let { _updateDeviceError.send(it) }
                     }
                     is Loading -> state = state.copy(updateDeviceLoading = true)
+                }
+            }
+        }
+    }
+
+    private fun updateWorkRadius(radius: Int) {
+        viewModelScope.launch {
+            workRadiusUseCase.invoke(radius = radius).collect { result ->
+                state = when (result) {
+                    is Error -> {
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                        state.copy(updateWorkRadiusLoading = false)
+                    }
+
+                    is Loading -> state.copy(updateWorkRadiusLoading = true)
+                    is Success -> {
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                        state.copy(
+                            updateWorkRadiusLoading = false,
+                            workRadius = radius
+                        )
+                    }
                 }
             }
         }

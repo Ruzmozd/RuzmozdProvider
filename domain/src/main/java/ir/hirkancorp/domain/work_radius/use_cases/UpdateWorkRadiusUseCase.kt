@@ -4,7 +4,7 @@ import ir.hirkancorp.domain.utils.ApiResult
 import ir.hirkancorp.domain.work_radius.repository.WorkRadiusRepository
 import kotlinx.coroutines.flow.Flow
 
-class UpdateWorkRadiususeCase(private val workRadiusRepository: WorkRadiusRepository) {
+class UpdateWorkRadiusUseCase(private val workRadiusRepository: WorkRadiusRepository) {
 
     suspend operator fun invoke(radius: Int): Flow<ApiResult<String>> = workRadiusRepository.updateWorkRadius(radius = radius)
 
