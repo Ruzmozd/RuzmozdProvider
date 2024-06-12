@@ -10,6 +10,7 @@ import ir.hirkancorp.data.provider_status.di.providerStatusModule
 import ir.hirkancorp.data.register.di.registerModule
 import ir.hirkancorp.data.update_device.di.updateDeviceModule
 import ir.hirkancorp.data.upload_document.di.uploadDocumentModule
+import ir.hirkancorp.data.work_radius.di.workRadiusModule
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -24,6 +25,7 @@ val dataModule = module {
         authModule,
         providerProfileModule,
         providerStatusModule,
-        updateDeviceModule
+        updateDeviceModule,
+        workRadiusModule
     )
 }
