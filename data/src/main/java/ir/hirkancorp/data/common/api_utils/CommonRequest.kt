@@ -1,7 +1,6 @@
 package ir.hirkancorp.data.common.api_utils
 
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.utils.ApiResult
@@ -20,7 +19,7 @@ fun <T> commonRequest(
     try {
         val isFailure = errorCodes.any { httpStatusCode -> status == httpStatusCode }
         if (isFailure) {
-            emit(ApiResult.Error(code = status.value, message = status.description))
+            emit(ApiResult.Error(code = status.value, message = response.statusMessage() ?: status.description))
         } else {
             val actionIndex: Int =
                 successActions.map { it.first }
@@ -46,7 +45,7 @@ fun <T> commonRequest(
             status == httpStatusCode
         }
         if (isFailure) {
-            emit(ApiResult.Error(code = status.value, message = status.description))
+            emit(ApiResult.Error(code = status.value, message = response.statusMessage() ?: status.description))
         } else {
             emit(ApiResult.Success(successAction.second(response)))
         }
