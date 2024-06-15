@@ -1,11 +1,11 @@
-package ir.hirkancorp.data.provider_status.di
+package ir.hirkancorp.data.provider_location.di
 
 import ir.hirkancorp.data.provider_location.remote.ProviderLocationRemote
 import ir.hirkancorp.data.provider_location.repository.ProviderLocationRepositoryImpl
-import ir.hirkancorp.domain.provider_status.repository.ProviderStatusRepository
+import ir.hirkancorp.domain.provider_location.repository.ProviderLocationRepository
 import org.koin.dsl.module
 
-val providerStatusModule = module {
+val providerLocationModule = module {
     single<ProviderLocationRemote> { ProviderLocationRemote(get()) }
-    single<ProviderStatusRepository> { ProviderLocationRepositoryImpl(get()) }
+    single<ProviderLocationRepository> { ProviderLocationRepositoryImpl(get()) }
 }

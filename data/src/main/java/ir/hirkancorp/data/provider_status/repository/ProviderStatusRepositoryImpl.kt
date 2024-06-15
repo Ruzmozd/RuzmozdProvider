@@ -5,14 +5,14 @@ import io.ktor.http.HttpStatusCode
 import ir.hirkancorp.data.common.api_utils.commonRequest
 import ir.hirkancorp.data.common.model.HttpResponseModel
 import ir.hirkancorp.data.provider_status.model.ProviderStatus
-import ir.hirkancorp.data.provider_status.remote.ProviderStatusRemote
+import ir.hirkancorp.data.provider_location.remote.ProviderLocationRemote
 import ir.hirkancorp.domain.provider_status.repository.ProviderStatusRepository
 import ir.hirkancorp.domain.utils.ApiResult
 import kotlinx.coroutines.flow.Flow
 
-class ProviderStatusRepositoryImpl(private val client: ProviderStatusRemote): ProviderStatusRepository {
+class ProviderStatusRepositoryImpl(private val client: ProviderLocationRemote): ProviderStatusRepository {
     override suspend fun updateStatus(status: Int): Flow<ApiResult<Boolean>> = commonRequest(
-        httpResponse = { client.updateStatus(status = status) },
+        httpResponse = { client.updateProviderLocation(status = status) },
         errorCodes = listOf(),
         successAction = Pair(HttpStatusCode.OK) { response ->
             response.body<HttpResponseModel<ProviderStatus>>().data.isOnline
