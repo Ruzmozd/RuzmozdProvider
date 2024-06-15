@@ -78,12 +78,6 @@ fun MainScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        viewModel.updateDeviceError.collectLatest {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        }
-    }
-
-    LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collectLatest { uiEvent ->
             when(uiEvent) {
                 is UiEvent.ShowSnackBar -> {

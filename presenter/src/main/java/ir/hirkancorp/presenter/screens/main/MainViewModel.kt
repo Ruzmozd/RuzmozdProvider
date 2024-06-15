@@ -38,12 +38,6 @@ class MainViewModel(
     private var _uiEvent = Channel<UiEvent>()
     var uiEvent = _uiEvent.receiveAsFlow()
 
-    private var _updateDeviceError = Channel<String>()
-    var updateDeviceError = _updateDeviceError.receiveAsFlow()
-
-    private var _navigateToInProgressJobScreen = Channel<Int>()
-    var navigateToInProgressJobScreen = _navigateToInProgressJobScreen.receiveAsFlow()
-
     fun onEvent(event: MainScreenEvent) = when(event) {
         is CheckIfAuthenticate -> isAuthenticate()
         is HandleMissedLocationPermission -> handleMissedLocationPermission(event.show)
@@ -99,11 +93,11 @@ class MainViewModel(
                 when(result) {
                     is Success -> {
                         state = state.copy(updateDeviceLoading = false)
-                        result.data?.jobId?.let { _navigateToInProgressJobScreen.send(it) }
+                        result.data?.jobId?.let { _uiEvent.send(UiEvent.Navigate("")) } // navigate to job progress
                     }
                     is Error -> {
                         state =  state.copy(updateDeviceLoading = false)
-                        result.message?.let { _updateDeviceError.send(it) }
+                        result.message?.let { _uiEvent.send(UiEvent.ShowSnackBar(it)) }
                     }
                     is Loading -> state = state.copy(updateDeviceLoading = true)
                 }
