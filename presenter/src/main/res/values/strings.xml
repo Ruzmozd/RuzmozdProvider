@@ -95,4 +95,6 @@
     <string name="main_screen_provider_info_pending_jobs">خدمات تکمیل نشده: %1$s</string>
     <string name="main_screen_provider_state_text_offline">شما آفلاین هستید</string>
     <string name="main_screen_provider_state_text_online">شما آنلاین هستید</string>
+    <string name="main_screen_provider_radius">%1$s ک.م</string>
+    <string name="main_screen_radius_text">محدوده</string>
 </resources>

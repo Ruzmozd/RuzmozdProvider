@@ -13,8 +13,6 @@ data class MainScreenState(
     val providerStatusDialogMessage: String = "",
     val providerStatusDialog: Boolean = false,
     val updateDeviceLoading: Boolean = false,
-    val updateWorkRadiusLoading: Boolean = false,
-    val workRadius: Int = 0,
 )
 
 sealed class ProviderProfileState {

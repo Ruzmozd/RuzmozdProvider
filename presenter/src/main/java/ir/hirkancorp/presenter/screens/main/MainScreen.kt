@@ -4,16 +4,23 @@ import android.Manifest
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
@@ -22,9 +29,11 @@ import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
+import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.components.ProviderInfoCard
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponent
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponentLoading
+import ir.hirkancorp.presenter.screens.main.components.WorkRadius
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import org.osmdroid.config.Configuration
@@ -51,6 +60,8 @@ fun MainScreen(
     val context = LocalContext.current
     val state = viewModel.state
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(key1 = true) {
         viewModel.run {
             onEvent(MainScreenEvent.CheckIfAuthenticate)
@@ -69,6 +80,19 @@ fun MainScreen(
     LaunchedEffect(key1 = true) {
         viewModel.updateDeviceError.collectLatest {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collectLatest { uiEvent ->
+            when(uiEvent) {
+                is UiEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(uiEvent.message)
+                }
+
+                is UiEvent.Navigate -> {}
+                UiEvent.NavigateUp -> {}
+            }
         }
     }
 
@@ -153,7 +177,10 @@ fun MainScreen(
 
 
             Scaffold(
-                modifier = modifier.fillMaxSize()
+                modifier = modifier.fillMaxSize(),
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
+                },
             ) { paddingValues ->
                 Box(
                     modifier = Modifier
@@ -192,14 +219,22 @@ fun MainScreen(
                             map
                         }
                     )
-                    Box(modifier = Modifier.align(Alignment.TopCenter)) {
+                    Column(modifier = Modifier.align(Alignment.TopCenter)) {
                         if (state.updateDeviceLoading)
                             ProviderStateComponentLoading()
                         else ProviderStateComponent(
                             state = state,
                             onCheckedChange = { checked ->
                                 viewModel.onEvent(MainScreenEvent.UpdateProviderStatus(checked))
-                            })
+                            }
+                        )
+                        if (state.profileState is ProviderProfileState.Success) {
+                            WorkRadius(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                radius = state.profileState.providerProfile?.location?.workRadius!!,
+                                setRadius = { viewModel.onEvent(MainScreenEvent.UpdateWorkRadius(it)) }
+                            )
+                        }
                     }
                     ProviderInfoCard(
                         modifier = Modifier.align(Alignment.BottomCenter),

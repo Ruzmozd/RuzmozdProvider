@@ -114,20 +114,10 @@ class MainViewModel(
     private fun updateWorkRadius(radius: Int) {
         viewModelScope.launch {
             workRadiusUseCase.invoke(radius = radius).collect { result ->
-                state = when (result) {
-                    is Error -> {
-                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
-                        state.copy(updateWorkRadiusLoading = false)
-                    }
-
-                    is Loading -> state.copy(updateWorkRadiusLoading = true)
-                    is Success -> {
-                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
-                        state.copy(
-                            updateWorkRadiusLoading = false,
-                            workRadius = radius
-                        )
-                    }
+                when (result) {
+                    is Loading -> {}
+                    is Error -> _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                    is Success -> _uiEvent.send(UiEvent.ShowSnackBar(result.data.orEmpty()))
                 }
             }
         }
