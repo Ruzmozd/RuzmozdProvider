@@ -1,4 +1,4 @@
-package ir.hirkancorp.domain.provider_status.use_cases
+package ir.hirkancorp.domain.provider_location.use_cases
 
 import ir.hirkancorp.domain.provider_location.repository.ProviderLocationRepository
 import ir.hirkancorp.domain.utils.ApiResult
