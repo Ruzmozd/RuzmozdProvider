@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
@@ -28,10 +29,18 @@ import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_ID
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_REQUEST_ID
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_BOOK_JOB
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_JOB
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_REQUEST
 import ir.hirkancorp.presenter.core.utils.LocationUtil
 import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.core.utils.UiText
 import ir.hirkancorp.presenter.core.utils.asString
+import ir.hirkancorp.presenter.core.utils.findActivity
 import ir.hirkancorp.presenter.screens.main.components.ProviderInfoCard
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponent
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponentLoading
@@ -148,6 +157,24 @@ fun MainScreen(
 
                         else -> {}
                     }
+                }
+            }
+
+            LaunchedEffect(key1 = true) {
+                context.findActivity()?.intent.let { intent ->
+                    val type = intent?.extras?.getString(TYPE).orEmpty()
+                    val id = when (type) {
+                        TYPE_BOOK_JOB, TYPE_CANCEL_REQUEST -> intent?.extras?.getString(JOB_REQUEST_ID)!!.ifEmpty { "0" }.toInt()
+                        TYPE_CANCEL_JOB -> intent?.extras?.getString(JOB_ID)!!.ifEmpty { "0" }.toInt()
+                        else -> 0
+                    }
+                    viewModel.onEvent(MainScreenEvent.HandleNotification(type = type, id = id))
+                    LoggerUtil.logE("GET EXTRAS", type.toString())
+//                    val data = JSONObject()
+//                    intent?.extras?.keySet()?.forEach {
+//                        data.put(it, intent.extras?.get(it))
+//                    }
+//                    LoggerUtil.logE("GET EXTRAS", data.toString())
                 }
             }
 

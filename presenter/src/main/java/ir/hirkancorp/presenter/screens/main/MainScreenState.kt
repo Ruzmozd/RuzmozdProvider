@@ -14,6 +14,9 @@ data class MainScreenState(
     val providerStatusDialogMessage: String = "",
     val providerStatusDialog: Boolean = false,
     val updateDeviceLoading: Boolean = false,
+    val requestNotificationState: NotificationEvent = NotificationEvent.Idle,
+    val requestId: Int = 0,
+    val jobId: Int = 0,
 )
 
 sealed class ProviderProfileState {
@@ -28,4 +31,12 @@ sealed class ProviderStatus {
     data object Loading : ProviderStatus()
     data class Error(val message: String) : ProviderStatus()
     data object Success : ProviderStatus()
+}
+
+
+sealed class NotificationEvent {
+    data object Idle: NotificationEvent()
+    data class JobRequest(val requestId: Int): NotificationEvent()
+    data class CancelRequest(val requestId: Int): NotificationEvent()
+    data class CancelJob(val requestId: Int): NotificationEvent()
 }

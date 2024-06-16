@@ -15,6 +15,9 @@ import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
 import ir.hirkancorp.domain.work_radius.use_cases.UpdateWorkRadiusUseCase
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_BOOK_JOB
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_JOB
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_REQUEST
 import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.CheckIfAuthenticate
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocationPermission
@@ -51,6 +54,14 @@ class MainViewModel(
         is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
         is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
         is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
+        is MainScreenEvent.HandleNotification -> handleNotification(type = event.type, id = event.id)
+    }
+
+    private fun handleNotification(type: String, id: Int) = when (type) {
+        TYPE_BOOK_JOB -> {}
+        TYPE_CANCEL_REQUEST -> {}
+        TYPE_CANCEL_JOB -> {}
+        else -> null
     }
 
     private fun handleMissedNotificationPermissionError(show: Boolean) {

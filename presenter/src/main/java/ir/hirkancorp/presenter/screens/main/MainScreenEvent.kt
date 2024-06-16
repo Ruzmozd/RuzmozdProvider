@@ -12,5 +12,6 @@ sealed class MainScreenEvent {
     data class ShowProviderStatusDialog(val show: Boolean, val message: String): MainScreenEvent()
     data class UpdateDevice(val deviceId: String): MainScreenEvent()
     data class UpdateWorkRadius(val radius: Int) : MainScreenEvent()
+    data class HandleNotification(val type: String, val id: Int) : MainScreenEvent()
 
 }
