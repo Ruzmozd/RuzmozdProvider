@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
+import ir.hirkancorp.domain.provider_location.use_cases.ProviderLocationUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
 import ir.hirkancorp.domain.update_device.use_cases.UpdateDeviceUseCase
@@ -26,7 +27,8 @@ class MainViewModel(
     private val providerProfileUseCase: ProviderProfileUseCase,
     private val providerStatusUseCase: ProviderStatusUseCase,
     private val updateDeviceUseCase: UpdateDeviceUseCase,
-    private val workRadiusUseCase: UpdateWorkRadiusUseCase
+    private val workRadiusUseCase: UpdateWorkRadiusUseCase,
+    private val providerLocationUseCase: ProviderLocationUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(MainScreenState())
@@ -44,7 +46,7 @@ class MainViewModel(
         is MainScreenEvent.HandleMissedLocationPermissionError -> handleMissedLocationPermissionError(event.show)
         is MainScreenEvent.GetProviderProfile -> getProviderProfile()
         is MainScreenEvent.UpdateProviderStatus -> updateProviderStatus(event.isOnline)
-        is MainScreenEvent.UpdateLocation -> updateLocation()
+        is MainScreenEvent.UpdateLocation -> updateLocation(event.location)
         is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
         is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
         is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
@@ -117,9 +119,15 @@ class MainViewModel(
         }
     }
 
-    private fun updateLocation() {
+    private fun updateLocation(location: Pair<Double, Double>) {
         viewModelScope.launch {
-
+            providerLocationUseCase.invoke(lat = location.first, lng = location.second).collect { result ->
+                when(result) {
+                    is Error -> _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                    is Loading -> {}
+                    is Success -> {}
+                }
+            }
         }
     }
 

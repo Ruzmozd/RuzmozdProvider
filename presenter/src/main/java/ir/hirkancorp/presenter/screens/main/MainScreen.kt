@@ -1,13 +1,11 @@
 package ir.hirkancorp.presenter.screens.main
 
 import android.Manifest
-import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
@@ -15,11 +13,11 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
@@ -29,12 +27,17 @@ import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
+import ir.hirkancorp.presenter.core.utils.LocationUtil
 import ir.hirkancorp.presenter.core.utils.UiEvent
+import ir.hirkancorp.presenter.core.utils.UiText
+import ir.hirkancorp.presenter.core.utils.asString
 import ir.hirkancorp.presenter.screens.main.components.ProviderInfoCard
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponent
 import ir.hirkancorp.presenter.screens.main.components.ProviderStateComponentLoading
 import ir.hirkancorp.presenter.screens.main.components.WorkRadius
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -59,6 +62,7 @@ fun MainScreen(
 
     val context = LocalContext.current
     val state = viewModel.state
+    val scope = rememberCoroutineScope()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -99,7 +103,7 @@ fun MainScreen(
                 onPermissionGranted = {
                     viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false))
                     viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(false))
-                    viewModel.onEvent(MainScreenEvent.UpdateLocation)
+                    updateLocation(context, viewModel, scope, snackbarHostState)
                 },
                 onPermissionDenied = { permissions ->
                     if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
@@ -247,4 +251,26 @@ fun MainScreen(
     }
 
 
+}
+
+private fun updateLocation(
+    context: Context,
+    viewModel: MainViewModel,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState
+) {
+    LocationUtil.getCurrentLocation(
+        context = context,
+        onGetCurrentLocationSuccess = { location ->
+            viewModel.onEvent(MainScreenEvent.UpdateLocation(location))
+        },
+        onGetCurrentLocationFailed = {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = UiText.StringResource(R.string.main_screen_location_error_snackbar)
+                        .asString(context)
+                )
+            }
+        }
+    )
 }

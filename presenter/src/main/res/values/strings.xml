@@ -97,4 +97,5 @@
     <string name="main_screen_provider_state_text_online">شما آنلاین هستید</string>
     <string name="main_screen_provider_radius">%1$s ک.م</string>
     <string name="main_screen_radius_text">محدوده</string>
+    <string name="main_screen_location_error_snackbar">خطا در دریافت موقعیت مکانی</string>
 </resources>
