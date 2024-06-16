@@ -72,7 +72,6 @@ fun MainScreen(
             authChannel.collectLatest {
                 if (it.not()) navigateToLoginScreen()
                 else {
-                    onEvent(MainScreenEvent.GetProviderProfile)
                     FirebaseUtils.getFirebaseToken { deviceId ->
                         onEvent(MainScreenEvent.UpdateDevice(deviceId))
                     }
@@ -102,7 +101,6 @@ fun MainScreen(
                 requiredPermissions = locationPermission,
                 onPermissionGranted = {
                     viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false))
-                    viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(false))
                     updateLocation(context, viewModel, scope, snackbarHostState)
                 },
                 onPermissionDenied = { permissions ->
@@ -111,7 +109,6 @@ fun MainScreen(
                         )
                     ) {
                         viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
-                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
                     }
                 },
                 onPermissionsRevoked = { permissions ->
@@ -120,7 +117,6 @@ fun MainScreen(
                         )
                     ) {
                         viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
-                        viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermissionError(true))
                     }
                 }
             )
@@ -145,7 +141,7 @@ fun MainScreen(
             when {
                 state.locationErrorDialog -> RuzmozdDialog(
                     title = stringResource(id = R.string.app_name),
-                    content = stringResource(R.string.main_screen_location_error_dialog_content),
+                    content = stringResource(R.string.main_screen_missed_location_error),
                     submitButtonText = stringResource(id = R.string.all_submit),
                     dismissOnClickOutside = false,
                     onConfirmation = {
@@ -172,7 +168,6 @@ fun MainScreen(
                     }
                 )
             }
-
 
             Scaffold(
                 modifier = modifier.fillMaxSize(),
@@ -238,13 +233,6 @@ fun MainScreen(
                         modifier = Modifier.align(Alignment.BottomCenter),
                         profileState = state.profileState
                     )
-                    //            when {
-                    //                state.missedLocationPermission -> ErrorPage(
-                    //                    errorMessage = stringResource(
-                    //                        R.string.main_screen_missed_location_error_page_content
-                    //                    )
-                    //                )
-                    //            }
                 }
             }
         }

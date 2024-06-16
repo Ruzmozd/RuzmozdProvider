@@ -125,7 +125,7 @@ class MainViewModel(
                 when(result) {
                     is Error -> _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
                     is Loading -> {}
-                    is Success -> {}
+                    is Success -> { onEvent(MainScreenEvent.GetProviderProfile) }
                 }
             }
         }
