@@ -98,4 +98,8 @@
     <string name="main_screen_provider_radius">%1$s ک.م</string>
     <string name="main_screen_radius_text">محدوده</string>
     <string name="main_screen_location_error_snackbar">خطا در دریافت موقعیت مکانی</string>
+    <string name="firebase_messaging_service_cancel_job_reason_unknown">این کار به دلایل نامشخص لغو شد</string>
+    <string name="firebase_messaging_service_cancel_job_reason_by_user">این کار بتوسط کاربر لغو شد</string>
+    <string name="firebase_messaging_service_cancel_request_reason_by_user">رخواست به دلایل نامشخص لغو شد</string>
+    <string name="firebase_messaging_service_cancel_request_reason_unknown">رخواست بتوسط کاربر لغو شد</string>
 </resources>
