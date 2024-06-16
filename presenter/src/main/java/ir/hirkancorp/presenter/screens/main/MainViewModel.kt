@@ -44,12 +44,17 @@ class MainViewModel(
         is CheckIfAuthenticate -> isAuthenticate()
         is HandleMissedLocationPermission -> handleMissedLocationPermission(event.show)
         is MainScreenEvent.HandleMissedLocationPermissionError -> handleMissedLocationPermissionError(event.show)
+        is MainScreenEvent.HandleMissedNotificationPermission-> handleMissedNotificationPermissionError(event.show)
         is MainScreenEvent.GetProviderProfile -> getProviderProfile()
         is MainScreenEvent.UpdateProviderStatus -> updateProviderStatus(event.isOnline)
         is MainScreenEvent.UpdateLocation -> updateLocation(event.location)
         is MainScreenEvent.ShowProviderStatusDialog -> showProviderStatusDialog(event.show, event.message)
         is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
         is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
+    }
+
+    private fun handleMissedNotificationPermissionError(show: Boolean) {
+        state = state.copy(missedNotificationPermission = show)
     }
 
     private fun showProviderStatusDialog(show: Boolean, message: String) {

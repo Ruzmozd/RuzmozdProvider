@@ -2,6 +2,7 @@ package ir.hirkancorp.presenter.screens.main
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,6 +61,12 @@ fun MainScreen(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+    val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        locationPermission.apply { add(Manifest.permission.POST_NOTIFICATIONS) }
+    } else {
+        locationPermission
+    }
+
     val context = LocalContext.current
     val state = viewModel.state
     val scope = rememberCoroutineScope()
@@ -98,7 +105,7 @@ fun MainScreen(
         state.isAuthenticate -> {
 
             PermissionComponent(
-                requiredPermissions = locationPermission,
+                requiredPermissions = requiredPermissions,
                 onPermissionGranted = {
                     viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(false))
                     updateLocation(context, viewModel, scope, snackbarHostState)
@@ -110,6 +117,9 @@ fun MainScreen(
                     ) {
                         viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
                     }
+                    if (permissions.contains(Manifest.permission.POST_NOTIFICATIONS)) {
+                        viewModel.onEvent(MainScreenEvent.HandleMissedNotificationPermission(true))
+                    }
                 },
                 onPermissionsRevoked = { permissions ->
                     if (permissions.contains(Manifest.permission.ACCESS_FINE_LOCATION) && permissions.contains(
@@ -117,6 +127,9 @@ fun MainScreen(
                         )
                     ) {
                         viewModel.onEvent(MainScreenEvent.HandleMissedLocationPermission(true))
+                    }
+                    if (permissions.contains(Manifest.permission.POST_NOTIFICATIONS)) {
+                        viewModel.onEvent(MainScreenEvent.HandleMissedNotificationPermission(true))
                     }
                 }
             )
@@ -147,6 +160,20 @@ fun MainScreen(
                     onConfirmation = {
                         viewModel.onEvent(
                             MainScreenEvent.HandleMissedLocationPermission(
+                                false
+                            )
+                        )
+                    }
+                )
+
+                state.missedNotificationPermission -> RuzmozdDialog(
+                    title = stringResource(id = R.string.app_name),
+                    content = stringResource(R.string.main_screen_missed_notification_permission_error),
+                    submitButtonText = stringResource(id = R.string.all_submit),
+                    dismissOnClickOutside = false,
+                    onConfirmation = {
+                        viewModel.onEvent(
+                            MainScreenEvent.HandleMissedNotificationPermission(
                                 false
                             )
                         )

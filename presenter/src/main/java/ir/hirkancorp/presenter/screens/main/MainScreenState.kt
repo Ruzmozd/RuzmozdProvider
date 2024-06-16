@@ -8,6 +8,7 @@ data class MainScreenState(
     val locationErrorDialog: Boolean = false,
     val missedLocationPermissionDialog: Boolean = false,
     val missedLocationPermission: Boolean = false,
+    val missedNotificationPermission: Boolean = false,
     val profileState: ProviderProfileState = ProviderProfileState.Loading,
     val providerStatus: ProviderStatus = ProviderStatus.Idle,
     val providerStatusDialogMessage: String = "",

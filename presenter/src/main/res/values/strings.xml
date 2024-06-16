@@ -34,6 +34,7 @@
     <string name="app_name">روزمزد کارگر</string>
     <string name="providers_screen_top_app_bar_title">کارگران</string>
     <string name="main_screen_missed_location_error">جهت ادامه دسترسی به موقعیت مکانی را از تنظیمات اپلیکیشن روزمزد مجاز کنید</string>
+    <string name="main_screen_missed_notification_permission_error">جهت دریافت اعلانات باید دسترسی به ارسال نوتیفیکیشن را مجاز کنید</string>
     <string name="providers_screen_missed_location_dialog_content">جهت نمایش کارگران اطراف شما دسترسی به موقعیت مکانی را مجاز کنید</string>
     <string name="main_screen_location_error_dialog_content">خطایی در دریافت موقعیت مکانی رخ داده است</string>
     <string name="requests_screen_top_app_bar_title">درخواست ها</string>
