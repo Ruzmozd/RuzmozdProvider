@@ -13,9 +13,13 @@ class NotificationSharedFlowWrapper<T> {
         _message.emit(value)
     }
 
+    fun hasSubscription(): Boolean {
+       return _message.subscriptionCount.value > 0
+    }
+
 }
 
 // Qualifiers
- const val NOTIFICATION_STATE_BOOK_JOB = "book_job"
- const val NOTIFICATION_STATE_CANCEL_JOB = "book_job"
- const val NOTIFICATION_STATE_CANCEL_REQUEST = "cancel_request"
+const val NOTIFICATION_STATE_BOOK_JOB = "book_job"
+const val NOTIFICATION_STATE_CANCEL_JOB = "book_job"
+const val NOTIFICATION_STATE_CANCEL_REQUEST = "cancel_request"
