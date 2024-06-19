@@ -15,6 +15,8 @@ import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
 import ir.hirkancorp.domain.work_radius.use_cases.UpdateWorkRadiusUseCase
+import ir.hirkancorp.presenter.core.firebaseMessaging.NOTIFICATION_STATE_BOOK_JOB
+import ir.hirkancorp.presenter.core.firebaseMessaging.NotificationSharedFlowWrapper
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_BOOK_JOB
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_JOB
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_REQUEST
@@ -24,6 +26,9 @@ import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocation
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.qualifier.named
 
 class MainViewModel(
     private val authUseCase: AuthUseCase,
@@ -32,7 +37,10 @@ class MainViewModel(
     private val updateDeviceUseCase: UpdateDeviceUseCase,
     private val workRadiusUseCase: UpdateWorkRadiusUseCase,
     private val providerLocationUseCase: ProviderLocationUseCase
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
+
+    private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Boolean> =
+        get(named(NOTIFICATION_STATE_BOOK_JOB))
 
     var state by mutableStateOf(MainScreenState())
         private set
@@ -42,6 +50,14 @@ class MainViewModel(
 
     private var _uiEvent = Channel<UiEvent>()
     var uiEvent = _uiEvent.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            bookJobNotificationSharedFlowWrapper.message.collect { value ->
+                LoggerUtil.logE(::MainViewModel.name, value.toString())
+            }
+        }
+    }
 
     fun onEvent(event: MainScreenEvent) = when(event) {
         is CheckIfAuthenticate -> isAuthenticate()

@@ -17,4 +17,13 @@ object NotificationConstants {
     const val JOB_REQUEST_ID = "request_id"
     const val JOB_ID = "job_id"
 
+    const val BOOKING_USER_NAME = "user_name"
+    const val BOOKING_RATING = "rating"
+    const val BOOKING_ADDRESS = "address"
+    const val BOOKING_DISTANCE = "distance"
+    const val BOOKING_SERVICE_NAME = "service_name"
+    const val BOOKING_TOTAL_FARE = "total_fare"
+    const val BOOKING_NUMBER = "number"
+    const val BOOKING_FARE_TYPE = "fare_type"
+
 }
