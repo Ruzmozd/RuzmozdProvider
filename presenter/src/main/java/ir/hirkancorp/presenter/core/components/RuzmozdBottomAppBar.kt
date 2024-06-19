@@ -87,7 +87,10 @@ fun RowScope.NavItem(
     BottomNavigationItem(
         selected = selected,
         onClick = {
-            navController.navigate(screen.route)
+            navController.apply {
+                popBackStack()
+                navigate(screen.route)
+            }
         },
         icon = {
             Icon(
