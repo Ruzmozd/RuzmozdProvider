@@ -42,8 +42,6 @@ class MessagingService: FirebaseMessagingService(), KoinComponent {
         get(named(NOTIFICATION_STATE_BOOK_JOB))
     private val cancelJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<Int, String>> =
         get(named(NOTIFICATION_STATE_CANCEL_JOB))
-    private val cancelRequestNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<Int, String>> =
-        get(named(NOTIFICATION_STATE_CANCEL_REQUEST))
 
     private lateinit var scope: CoroutineScope
     private val notificationManager:  NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }

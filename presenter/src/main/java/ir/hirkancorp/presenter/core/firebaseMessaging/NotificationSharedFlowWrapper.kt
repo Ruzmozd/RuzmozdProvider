@@ -22,4 +22,3 @@ class NotificationSharedFlowWrapper<T> {
 // Qualifiers
 const val NOTIFICATION_STATE_BOOK_JOB = "book_job"
 const val NOTIFICATION_STATE_CANCEL_JOB = "book_job"
-const val NOTIFICATION_STATE_CANCEL_REQUEST = "cancel_request"

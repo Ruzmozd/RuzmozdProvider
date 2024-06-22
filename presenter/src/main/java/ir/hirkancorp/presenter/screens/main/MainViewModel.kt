@@ -20,7 +20,6 @@ import ir.hirkancorp.domain.utils.ApiResult.Success
 import ir.hirkancorp.domain.work_radius.use_cases.UpdateWorkRadiusUseCase
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.firebaseMessaging.NOTIFICATION_STATE_BOOK_JOB
-import ir.hirkancorp.presenter.core.firebaseMessaging.NOTIFICATION_STATE_CANCEL_REQUEST
 import ir.hirkancorp.presenter.core.firebaseMessaging.NotificationSharedFlowWrapper
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_ADDRESS
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_DISTANCE
@@ -63,9 +62,6 @@ class MainViewModel(
 
     private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<BookJob?, String?>> =
         get(named(NOTIFICATION_STATE_BOOK_JOB))
-
-    private val cancelRequestNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<Int, String>> =
-        get(named(NOTIFICATION_STATE_CANCEL_REQUEST))
 
     var state by mutableStateOf(MainScreenState())
         private set
