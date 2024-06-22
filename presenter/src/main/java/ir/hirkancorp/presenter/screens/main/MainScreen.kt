@@ -25,11 +25,21 @@ import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
+import ir.hirkancorp.domain.request.model.BookJob
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RequestDialog
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_ADDRESS
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_DISTANCE
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_FARE_TYPE
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_NUMBER
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_RATING
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_SERVICE_NAME
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_TOTAL_FARE
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_USER_NAME
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOK_TYPE
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_ID
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_REQUEST_ID
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE
@@ -163,12 +173,28 @@ fun MainScreen(
             LaunchedEffect(key1 = true) {
                 context.findActivity()?.intent.let { intent ->
                     val type = intent?.extras?.getString(TYPE).orEmpty()
-                    val id = when (type) {
-                        TYPE_BOOK_JOB, TYPE_CANCEL_REQUEST -> intent?.extras?.getString(JOB_REQUEST_ID)!!.ifEmpty { "0" }.toInt()
+                    when (type) {
+                        TYPE_BOOK_JOB -> {
+                            intent?.extras?.run {
+                                val bookJob = BookJob(
+                                    type = getString(TYPE).orEmpty(),
+                                    bookingType = getString(BOOK_TYPE).orEmpty(),
+                                    requestId =  getString(JOB_REQUEST_ID)!!.ifEmpty { "0" }.toInt(),
+                                    userName = getString(BOOKING_USER_NAME).orEmpty(),
+                                    rating =  getString(BOOKING_RATING).orEmpty().toInt(),
+                                    address = getString(BOOKING_ADDRESS).orEmpty(),
+                                    distance = getString(BOOKING_DISTANCE).orEmpty().toInt(),
+                                    serviceName = getString(BOOKING_SERVICE_NAME).orEmpty(),
+                                    totalFare =  getString(BOOKING_TOTAL_FARE).orEmpty(),
+                                    fareType = getString(BOOKING_FARE_TYPE).orEmpty(),
+                                    number = getString(BOOKING_NUMBER).orEmpty().toInt()
+                                )
+                                viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = bookJob))
+                            }
+                        }
                         TYPE_CANCEL_JOB -> intent?.extras?.getString(JOB_ID)!!.ifEmpty { "0" }.toInt()
-                        else -> 0
+                        else -> {}
                     }
-                    viewModel.onEvent(MainScreenEvent.HandleNotification(type = type, id = id))
                     LoggerUtil.logE("GET EXTRAS", type.toString())
 //                    val data = JSONObject()
 //                    intent?.extras?.keySet()?.forEach {
