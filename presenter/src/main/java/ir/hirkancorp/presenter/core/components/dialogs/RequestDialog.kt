@@ -44,7 +44,7 @@ fun RequestDialog(
     request: BookJob,
     icon: ImageVector = Icons.Default.Info,
     submitButtonText: String = stringResource(id = R.string.all_submit),
-    onsubmit: () -> Unit,
+    onSubmit: () -> Unit,
     dismissButtonText: String = stringResource(id = R.string.all_dismis),
     onDismiss: () -> Unit,
     onDismissRequest: () -> Unit = {},
@@ -127,7 +127,7 @@ fun RequestDialog(
                     )
                     Text(
                         modifier = Modifier,
-                        text = "${request.fare} تومان",
+                        text = "${request.totalFare} تومان",
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.primary,
                         style = MaterialTheme.typography.body2,
@@ -170,7 +170,7 @@ fun RequestDialog(
                 ColoredButton(
                     text = submitButtonText,
                     color = localColors.success,
-                    onClick = onsubmit
+                    onClick = onSubmit
                 )
                 ColoredButton(
                     text = dismissButtonText,
@@ -190,7 +190,7 @@ val request = BookJob(
     address = "آبادانف کوی کارگرُ ردیف کیو ۲۷ اتاق ۳ُ طبقه اول واحد ۲ ۳",
     distance = 1163,
     serviceName = "Carole Gates",
-    fare = "۲۳۰۰۰۰",
+    totalFare = "۲۳۰۰۰۰",
     fareType = "PerHour"
 
 )
@@ -206,7 +206,7 @@ fun RequestDialogPreview() {
             request = request,
             submitButtonText = stringResource(id = R.string.request_dialog_accept),
             dismissButtonText = stringResource(id = R.string.request_dialog_decline),
-            onDismissRequest = {}, onsubmit = {}, onDismiss = {},
+            onDismissRequest = {}, onSubmit = {}, onDismiss = {},
         )
     }
 }

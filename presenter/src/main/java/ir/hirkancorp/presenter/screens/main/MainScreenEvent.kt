@@ -1,5 +1,7 @@
 package ir.hirkancorp.presenter.screens.main
 
+import ir.hirkancorp.domain.request.model.BookJob
+
 sealed class MainScreenEvent {
 
     data object CheckIfAuthenticate: MainScreenEvent()
@@ -13,5 +15,6 @@ sealed class MainScreenEvent {
     data class UpdateDevice(val deviceId: String): MainScreenEvent()
     data class UpdateWorkRadius(val radius: Int) : MainScreenEvent()
     data class HandleNotification(val type: String, val id: Int) : MainScreenEvent()
+    data class ShowJobRequestDialog(val show: Boolean, val job: BookJob?) : MainScreenEvent()
 
 }

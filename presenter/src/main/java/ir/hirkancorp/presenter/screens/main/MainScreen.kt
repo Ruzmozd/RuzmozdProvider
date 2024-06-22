@@ -27,9 +27,9 @@ import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
+import ir.hirkancorp.presenter.core.components.dialogs.RequestDialog
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_ID
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_REQUEST_ID
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE
@@ -178,6 +178,15 @@ fun MainScreen(
                 }
             }
 
+            when(state.requestNotificationState) {
+                is NotificationEvent.Idle -> {}
+                is NotificationEvent.CancelJob -> {}
+                is NotificationEvent.CancelRequest -> {}
+                is NotificationEvent.JobRequest -> {
+                    viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
+                }
+            }
+
             when {
                 state.locationErrorDialog -> RuzmozdDialog(
                     title = stringResource(id = R.string.app_name),
@@ -221,6 +230,18 @@ fun MainScreen(
                         )
                     }
                 )
+
+                state.showJobRequestDialog -> {
+                    state.job?.let { job ->
+                        RequestDialog(
+                            title = stringResource(R.string.main_screen_request_dialog_title_new_request),
+                            request = job,
+                            onSubmit = { /*TODO*/ },
+                            onDismiss = { /*TODO*/ }
+                        )
+                    }
+                }
+
             }
 
             Scaffold(

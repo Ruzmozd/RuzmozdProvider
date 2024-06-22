@@ -111,4 +111,5 @@
     <string name="request_dialog_rating">امتیاز: %1$s</string>
     <string name="notification_channel_name">Ruzmozd Provider</string>
     <string name="firebase_messaging_service_notification_title">درخواست جدید - %1$s</string>
+    <string name="main_screen_request_dialog_title_new_request">درخواست جدید</string>
 </resources>

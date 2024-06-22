@@ -1,6 +1,7 @@
 package ir.hirkancorp.presenter.screens.main
 
 import ir.hirkancorp.domain.provider_profile.models.ProviderProfile
+import ir.hirkancorp.domain.request.model.BookJob
 
 data class MainScreenState(
     val isLoadingAuth: Boolean = false,
@@ -15,6 +16,8 @@ data class MainScreenState(
     val providerStatusDialog: Boolean = false,
     val updateDeviceLoading: Boolean = false,
     val requestNotificationState: NotificationEvent = NotificationEvent.Idle,
+    val showJobRequestDialog: Boolean = false,
+    val job: BookJob? = null,
     val requestId: Int = 0,
     val jobId: Int = 0,
 )
@@ -36,7 +39,7 @@ sealed class ProviderStatus {
 
 sealed class NotificationEvent {
     data object Idle: NotificationEvent()
-    data class JobRequest(val requestId: Int): NotificationEvent()
+    data class JobRequest(val job: BookJob): NotificationEvent()
     data class CancelRequest(val requestId: Int): NotificationEvent()
-    data class CancelJob(val requestId: Int): NotificationEvent()
+    data class CancelJob(val jobId: Int): NotificationEvent()
 }

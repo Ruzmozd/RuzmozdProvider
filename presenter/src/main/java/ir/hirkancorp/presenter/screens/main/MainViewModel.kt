@@ -10,6 +10,7 @@ import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
 import ir.hirkancorp.domain.provider_location.use_cases.ProviderLocationUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
+import ir.hirkancorp.domain.request.model.BookJob
 import ir.hirkancorp.domain.update_device.use_cases.UpdateDeviceUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
@@ -39,7 +40,7 @@ class MainViewModel(
     private val providerLocationUseCase: ProviderLocationUseCase
 ) : ViewModel(), KoinComponent {
 
-    private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Boolean> =
+    private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<BookJob> =
         get(named(NOTIFICATION_STATE_BOOK_JOB))
 
     var state by mutableStateOf(MainScreenState())
@@ -52,12 +53,9 @@ class MainViewModel(
     var uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            bookJobNotificationSharedFlowWrapper.message.collect { value ->
-                LoggerUtil.logE(::MainViewModel.name, value.toString())
-            }
-        }
+        coolectNotificationSharedFlow()
     }
+
 
     fun onEvent(event: MainScreenEvent) = when(event) {
         is CheckIfAuthenticate -> isAuthenticate()
@@ -71,6 +69,11 @@ class MainViewModel(
         is MainScreenEvent.UpdateDevice -> updateDevice(event.deviceId)
         is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
         is MainScreenEvent.HandleNotification -> handleNotification(type = event.type, id = event.id)
+        is MainScreenEvent.ShowJobRequestDialog -> showJobRequestDialog(show = event.show, job = event.job)
+    }
+
+    private fun showJobRequestDialog(show: Boolean, job: BookJob?) {
+        state = state.copy(showJobRequestDialog = show, job = job)
     }
 
     private fun handleNotification(type: String, id: Int) = when (type) {
@@ -78,6 +81,16 @@ class MainViewModel(
         TYPE_CANCEL_REQUEST -> {}
         TYPE_CANCEL_JOB -> {}
         else -> null
+    }
+
+    private fun coolectNotificationSharedFlow() {
+        viewModelScope.launch {
+            bookJobNotificationSharedFlowWrapper.message.collect { bookJoob ->
+                state = state.copy(
+                    requestNotificationState = NotificationEvent.JobRequest(bookJoob)
+                )
+            }
+        }
     }
 
     private fun handleMissedNotificationPermissionError(show: Boolean) {
