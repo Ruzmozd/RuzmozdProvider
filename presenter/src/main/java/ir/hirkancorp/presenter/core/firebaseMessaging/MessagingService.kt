@@ -38,7 +38,7 @@ import org.koin.core.qualifier.named
 
 class MessagingService: FirebaseMessagingService(), KoinComponent {
 
-    private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<BookJob> =
+    private val bookJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<BookJob?, String?>> =
         get(named(NOTIFICATION_STATE_BOOK_JOB))
     private val cancelJobNotificationSharedFlowWrapper: NotificationSharedFlowWrapper<Pair<Int, String>> =
         get(named(NOTIFICATION_STATE_CANCEL_JOB))
@@ -77,7 +77,7 @@ class MessagingService: FirebaseMessagingService(), KoinComponent {
 
     private fun handleBookJob(data: Map<String, String>) {
         data[JOB_REQUEST_ID]?.let { requestId ->
-            val bookJob = BookJob(
+            val job = BookJob(
                 type = data[TYPE].orEmpty(),
                 bookingType = data[BOOK_TYPE].orEmpty(),
                 requestId =  requestId.toInt(),
@@ -91,12 +91,12 @@ class MessagingService: FirebaseMessagingService(), KoinComponent {
                 number = data[BOOKING_NUMBER].orEmpty().toInt()
             )
             if (bookJobNotificationSharedFlowWrapper.hasSubscription()) {
-                scope.launch { bookJobNotificationSharedFlowWrapper.emit(bookJob) }
+                scope.launch { bookJobNotificationSharedFlowWrapper.emit(job to null) }
             } else {
                 val notification = buildNotification(
                     title = getString(R.string.firebase_messaging_service_notification_title, data[BOOKING_TOTAL_FARE]),
                     content = data[BOOKING_ADDRESS].orEmpty(),
-                    intent = requestPendingIntent(bookJob)
+                    intent = requestPendingIntent(job)
                 )
                 notificationManager.notify(NotificationUtils.NOTIFICATION_ID, notification)
             }
@@ -116,12 +116,8 @@ class MessagingService: FirebaseMessagingService(), KoinComponent {
 
     private fun handleCancelRequest(data: Map<String, String>) {
         val reason = data[REASON].orEmpty()
-        val stringReason = when (reason) {
-            CANCEL_REASON_BY_USER -> getString(R.string.firebase_messaging_service_cancel_request_reason_by_user)
-            else -> getString(R.string.firebase_messaging_service_cancel_request_reason_unknown)
-        }
-        data[JOB_REQUEST_ID]?.let { requestId ->
-            scope.launch { cancelRequestNotificationSharedFlowWrapper.emit(requestId.toInt() to stringReason) }
+        data[JOB_REQUEST_ID]?.let {
+            scope.launch { bookJobNotificationSharedFlowWrapper.emit(null to reason) }
         }
     }
 

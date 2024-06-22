@@ -1,5 +1,6 @@
 package ir.hirkancorp.presenter.screens.main
 
+import android.os.Bundle
 import ir.hirkancorp.domain.request.model.BookJob
 
 sealed class MainScreenEvent {
@@ -14,7 +15,7 @@ sealed class MainScreenEvent {
     data class ShowProviderStatusDialog(val show: Boolean, val message: String): MainScreenEvent()
     data class UpdateDevice(val deviceId: String): MainScreenEvent()
     data class UpdateWorkRadius(val radius: Int) : MainScreenEvent()
-    data class HandleNotification(val type: String, val id: Int) : MainScreenEvent()
+    data class HandleNotification(val bundle: Bundle) : MainScreenEvent()
     data class ShowJobRequestDialog(val show: Boolean, val job: BookJob?) : MainScreenEvent()
 
 }

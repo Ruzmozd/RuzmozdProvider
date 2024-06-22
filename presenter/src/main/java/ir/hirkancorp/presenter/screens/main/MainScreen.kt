@@ -171,46 +171,54 @@ fun MainScreen(
             }
 
             LaunchedEffect(key1 = true) {
-                context.findActivity()?.intent.let { intent ->
-                    val type = intent?.extras?.getString(TYPE).orEmpty()
-                    when (type) {
-                        TYPE_BOOK_JOB -> {
-                            intent?.extras?.run {
-                                val bookJob = BookJob(
-                                    type = getString(TYPE).orEmpty(),
-                                    bookingType = getString(BOOK_TYPE).orEmpty(),
-                                    requestId =  getString(JOB_REQUEST_ID)!!.ifEmpty { "0" }.toInt(),
-                                    userName = getString(BOOKING_USER_NAME).orEmpty(),
-                                    rating =  getString(BOOKING_RATING).orEmpty().toInt(),
-                                    address = getString(BOOKING_ADDRESS).orEmpty(),
-                                    distance = getString(BOOKING_DISTANCE).orEmpty().toInt(),
-                                    serviceName = getString(BOOKING_SERVICE_NAME).orEmpty(),
-                                    totalFare =  getString(BOOKING_TOTAL_FARE).orEmpty(),
-                                    fareType = getString(BOOKING_FARE_TYPE).orEmpty(),
-                                    number = getString(BOOKING_NUMBER).orEmpty().toInt()
-                                )
-                                viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = bookJob))
-                            }
-                        }
-                        TYPE_CANCEL_JOB -> intent?.extras?.getString(JOB_ID)!!.ifEmpty { "0" }.toInt()
-                        else -> {}
-                    }
-                    LoggerUtil.logE("GET EXTRAS", type.toString())
+                context.findActivity()?.intent?.extras?.let { bundle ->
+                    viewModel.onEvent(MainScreenEvent.HandleNotification(bundle))
+//                    val type = bundle.getString(TYPE).orEmpty()
+//                    when (type) {
+//                        TYPE_BOOK_JOB -> {
+//                            bundle.run {
+//                                val bookJob = BookJob(
+//                                    type = getString(TYPE).orEmpty(),
+//                                    bookingType = getString(BOOK_TYPE).orEmpty(),
+//                                    requestId =  getString(JOB_REQUEST_ID)!!.ifEmpty { "0" }.toInt(),
+//                                    userName = getString(BOOKING_USER_NAME).orEmpty(),
+//                                    rating =  getString(BOOKING_RATING).orEmpty().toInt(),
+//                                    address = getString(BOOKING_ADDRESS).orEmpty(),
+//                                    distance = getString(BOOKING_DISTANCE).orEmpty().toInt(),
+//                                    serviceName = getString(BOOKING_SERVICE_NAME).orEmpty(),
+//                                    totalFare =  getString(BOOKING_TOTAL_FARE).orEmpty(),
+//                                    fareType = getString(BOOKING_FARE_TYPE).orEmpty(),
+//                                    number = getString(BOOKING_NUMBER).orEmpty().toInt()
+//                                )
+//                                viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = bookJob))
+//                            }
+//                        }
+//                        TYPE_CANCEL_REQUEST -> {
+//                            viewModel.onEvent(
+//                                MainScreenEvent.ShowJobRequestDialog(
+//                                    show = false,
+//                                    job = null
+//                                )
+//                            )
+//                        }
+//                        TYPE_CANCEL_JOB -> bundle?.extras?.getString(JOB_ID)!!.ifEmpty { "0" }.toInt()
+//                        else -> {}
+//                    }
+//                    LoggerUtil.logE("GET EXTRAS", type.toString())
 //                    val data = JSONObject()
-//                    intent?.extras?.keySet()?.forEach {
-//                        data.put(it, intent.extras?.get(it))
+//                    bundle?.bundle?.keySet()?.forEach {
+//                        data.put(it, bundle.bundle?.get(it))
 //                    }
 //                    LoggerUtil.logE("GET EXTRAS", data.toString())
                 }
             }
 
             when(state.requestNotificationState) {
-                is NotificationEvent.Idle -> {}
+                is NotificationEvent.Idle -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = null))
                 is NotificationEvent.CancelJob -> {}
                 is NotificationEvent.CancelRequest -> {}
-                is NotificationEvent.JobRequest -> {
-                    viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
-                }
+                is NotificationEvent.JobRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
+
             }
 
             when {

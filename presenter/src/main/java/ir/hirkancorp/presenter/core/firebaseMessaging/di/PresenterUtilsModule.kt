@@ -9,7 +9,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val presenterUtilsModule = module {
-    single(named(NOTIFICATION_STATE_BOOK_JOB)) { NotificationSharedFlowWrapper<BookJob>() }
+    single(named(NOTIFICATION_STATE_BOOK_JOB)) { NotificationSharedFlowWrapper<Pair<BookJob?, String?>>() }
     single(named(NOTIFICATION_STATE_CANCEL_JOB)) { NotificationSharedFlowWrapper<Pair<Int, String>>() }
     single(named(NOTIFICATION_STATE_CANCEL_REQUEST)) { NotificationSharedFlowWrapper<Pair<Int, String>>() }
 }
