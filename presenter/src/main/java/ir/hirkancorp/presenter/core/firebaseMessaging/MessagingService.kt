@@ -13,6 +13,7 @@ import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstant
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_FARE_TYPE
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_NUMBER
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_RATING
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_REQUEST_TIME
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_SERVICE_NAME
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_TOTAL_FARE
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_USER_NAME
@@ -86,7 +87,8 @@ class MessagingService: FirebaseMessagingService(), KoinComponent {
                 serviceName = data[BOOKING_SERVICE_NAME].orEmpty(),
                 totalFare =  data[BOOKING_TOTAL_FARE].orEmpty(),
                 fareType = data[BOOKING_FARE_TYPE].orEmpty(),
-                number = data[BOOKING_NUMBER].orEmpty().toInt()
+                number = data[BOOKING_NUMBER].orEmpty().toInt(),
+                requestTime = data[BOOKING_REQUEST_TIME].orEmpty().toInt()
             )
             if (bookJobNotificationSharedFlowWrapper.hasSubscription()) {
                 scope.launch { bookJobNotificationSharedFlowWrapper.emit(job to null) }

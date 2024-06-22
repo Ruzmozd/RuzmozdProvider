@@ -17,6 +17,7 @@ data class MainScreenState(
     val updateDeviceLoading: Boolean = false,
     val requestNotificationState: NotificationEvent = NotificationEvent.Idle,
     val showJobRequestDialog: Boolean = false,
+    val timerState: String = "00:00",
     val job: BookJob? = null,
     val requestId: Int = 0,
     val jobId: Int = 0,
@@ -40,6 +41,6 @@ sealed class ProviderStatus {
 sealed class NotificationEvent {
     data object Idle: NotificationEvent()
     data class JobRequest(val job: BookJob): NotificationEvent()
-    data class CancelRequest(val requestId: Int): NotificationEvent()
+    data object CancelRequest : NotificationEvent()
     data class CancelJob(val jobId: Int): NotificationEvent()
 }

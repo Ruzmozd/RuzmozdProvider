@@ -177,11 +177,10 @@ fun MainScreen(
             }
 
             when(state.requestNotificationState) {
-                is NotificationEvent.Idle -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = null))
+                is NotificationEvent.Idle -> {}
                 is NotificationEvent.CancelJob -> {}
-                is NotificationEvent.CancelRequest -> {}
+                is NotificationEvent.CancelRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = false, job = null))
                 is NotificationEvent.JobRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
-
             }
 
             when {
@@ -233,6 +232,7 @@ fun MainScreen(
                         RequestDialog(
                             title = stringResource(R.string.main_screen_request_dialog_title_new_request),
                             request = job,
+                            timerState = state.timerState,
                             onSubmit = { /*TODO*/ },
                             onDismiss = { /*TODO*/ }
                         )

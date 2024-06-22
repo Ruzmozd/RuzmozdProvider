@@ -42,6 +42,7 @@ import ir.hirkancorp.presenter.core.theme.localAlertColors
 fun RequestDialog(
     title: String,
     request: BookJob,
+    timerState: String,
     icon: ImageVector = Icons.Default.Info,
     submitButtonText: String = stringResource(id = R.string.all_submit),
     onSubmit: () -> Unit,
@@ -85,7 +86,7 @@ fun RequestDialog(
                         progress = .73f,
                         backgroundColor = MaterialTheme.colors.onBackground.copy(alpha = .1f)
                     )
-                    Text(text = "00:37", style = MaterialTheme.typography.h5)
+                    Text(text = timerState, style = MaterialTheme.typography.h5)
                 }
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
                 Row(
@@ -201,12 +202,12 @@ fun RequestDialogPreview() {
     RuzmozdProviderTheme(
         darkTheme = true
     ) {
-        RequestDialog(
-            title = "درخواست جدید",
-            request = request,
-            submitButtonText = stringResource(id = R.string.request_dialog_accept),
-            dismissButtonText = stringResource(id = R.string.request_dialog_decline),
-            onDismissRequest = {}, onSubmit = {}, onDismiss = {},
-        )
+//        RequestDialog(
+//            title = "درخواست جدید",
+//            request = request,
+//            submitButtonText = stringResource(id = R.string.request_dialog_accept),
+//            dismissButtonText = stringResource(id = R.string.request_dialog_decline),
+//            onDismissRequest = {}, onSubmit = {}, onDismiss = {},
+//        )
     }
 }

@@ -26,6 +26,7 @@ import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstant
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_FARE_TYPE
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_NUMBER
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_RATING
+import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_REQUEST_TIME
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_SERVICE_NAME
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_TOTAL_FARE
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_USER_NAME
@@ -37,6 +38,8 @@ import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstant
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_BOOK_JOB
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_JOB
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_REQUEST
+import ir.hirkancorp.presenter.core.utils.CountDownTimerUtil
+import ir.hirkancorp.presenter.core.utils.TimeUtils.toTimeFormat
 import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.CheckIfAuthenticate
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocationPermission
@@ -94,6 +97,28 @@ class MainViewModel(
 
     private fun showJobRequestDialog(show: Boolean, job: BookJob?) {
         state = state.copy(showJobRequestDialog = show, job = job)
+        if (show) {
+            val timeUntilFinish = (job?.requestTime?.toLong()?.minus(System.currentTimeMillis()))?.minus(90_000L)
+            timeUntilFinish?.let {
+                startRequestTimer(it)
+            }
+        }
+    }
+
+    private fun startRequestTimer(timeUntilFinish: Long) {
+        LoggerUtil.logI(::startRequestTimer.name, timeUntilFinish.toTimeFormat())
+        CountDownTimerUtil.startTimer(
+            millisInFuture = timeUntilFinish,
+            onTick = { tick ->
+                state = state.copy(
+                    timerState = tick.toTimeFormat()
+                )
+                LoggerUtil.logI(::MainViewModel.name, tick.toTimeFormat())
+            },
+            onFinish = {
+
+            }
+        )
     }
 
     private fun collectNotificationSharedFlow() {
@@ -106,7 +131,7 @@ class MainViewModel(
                 }
                 booking.second?.let { reason ->
                     state = state.copy(
-                        requestNotificationState = NotificationEvent.Idle,
+                        requestNotificationState = NotificationEvent.CancelRequest,
                     )
                     val stringReason = when (reason) {
                         CANCEL_REASON_BY_USER -> context.getString(R.string.firebase_messaging_service_cancel_request_reason_by_user)
@@ -134,7 +159,8 @@ class MainViewModel(
                         serviceName = getString(BOOKING_SERVICE_NAME).orEmpty(),
                         totalFare = getString(BOOKING_TOTAL_FARE).orEmpty(),
                         fareType = getString(BOOKING_FARE_TYPE).orEmpty(),
-                        number = getString(BOOKING_NUMBER).orEmpty().toInt()
+                        number = getString(BOOKING_NUMBER).orEmpty().toInt(),
+                        requestTime =getString(BOOKING_REQUEST_TIME).orEmpty().toInt()
                     )
                     emitNotification(job = job, null)
                 }

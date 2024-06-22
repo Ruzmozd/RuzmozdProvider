@@ -25,5 +25,6 @@ object NotificationConstants {
     const val BOOKING_TOTAL_FARE = "total_fare"
     const val BOOKING_NUMBER = "number"
     const val BOOKING_FARE_TYPE = "fare_type"
+    const val BOOKING_REQUEST_TIME = "request_time"
 
 }

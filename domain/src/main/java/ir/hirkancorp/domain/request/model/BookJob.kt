@@ -12,4 +12,5 @@ data class BookJob(
     val totalFare: String = "",
     val fareType: String = "",
     val number: Int = 0,
+    val requestTime: Int = 0
 )
