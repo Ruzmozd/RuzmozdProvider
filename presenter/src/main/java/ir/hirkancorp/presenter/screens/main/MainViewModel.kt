@@ -97,12 +97,6 @@ class MainViewModel(
 
     private fun showJobRequestDialog(show: Boolean, job: BookJob?) {
         state = state.copy(showJobRequestDialog = show, job = job)
-        if (show) {
-            val timeUntilFinish = (job?.requestTime?.toLong()?.minus(System.currentTimeMillis()))?.minus(90_000L)
-            timeUntilFinish?.let {
-                startRequestTimer(it)
-            }
-        }
     }
 
     private fun startRequestTimer(timeUntilFinish: Long) {
@@ -115,9 +109,7 @@ class MainViewModel(
                 )
                 LoggerUtil.logI(::MainViewModel.name, tick.toTimeFormat())
             },
-            onFinish = {
-
-            }
+            onFinish = { }
         )
     }
 
