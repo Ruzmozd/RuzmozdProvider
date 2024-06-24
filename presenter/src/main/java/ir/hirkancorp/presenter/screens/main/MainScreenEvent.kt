@@ -18,5 +18,6 @@ sealed class MainScreenEvent {
     data class HandleNotification(val bundle: Bundle) : MainScreenEvent()
     data class ShowJobRequestDialog(val show: Boolean, val job: BookJob?) : MainScreenEvent()
     data class AcceptRequest(val requestId: Int) : MainScreenEvent()
+    data class CancelRequest(val requestId: Int) : MainScreenEvent()
 
 }

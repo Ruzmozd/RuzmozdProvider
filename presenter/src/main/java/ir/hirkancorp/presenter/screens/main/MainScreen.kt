@@ -161,7 +161,6 @@ fun MainScreen(
 
             when(state.requestNotificationState) {
                 is NotificationEvent.Idle -> {}
-                is NotificationEvent.CancelJob -> {}
                 is NotificationEvent.CancelRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = false, job = null))
                 is NotificationEvent.JobRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
             }
@@ -217,11 +216,13 @@ fun MainScreen(
                             request = job,
                             timerState = state.timerState,
                             acceptRequestLoading = state.acceptRequestLoading,
-                            declineRequestLoading = state.declineRequestLoading,
+                            cancelRequestLoading = state.cancelRequestLoading,
                             onSubmit = { requestId ->
                                 viewModel.onEvent(MainScreenEvent.AcceptRequest(requestId))
                             },
-                            onDismiss = { /*TODO*/ }
+                            onDismiss = { requestId ->
+                                viewModel.onEvent(MainScreenEvent.CancelRequest(requestId))
+                            }
                         )
                     }
                 }

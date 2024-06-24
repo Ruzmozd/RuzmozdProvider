@@ -45,7 +45,7 @@ fun RequestDialog(
     timerState: String,
     icon: ImageVector = Icons.Default.Info,
     acceptRequestLoading: Boolean = false,
-    declineRequestLoading: Boolean = false,
+    cancelRequestLoading: Boolean = false,
     submitButtonText: String = stringResource(id = R.string.request_dialog_accept),
     onSubmit: (requestId: Int) -> Unit,
     dismissButtonText: String = stringResource(id = R.string.request_dialog_decline),
@@ -173,7 +173,7 @@ fun RequestDialog(
                         modifier = Modifier.weight(1f),
                         text = submitButtonText,
                         color = localColors.success,
-                        enabled = !acceptRequestLoading || !declineRequestLoading,
+                        enabled = !acceptRequestLoading || !cancelRequestLoading,
                         isLoading = acceptRequestLoading,
                         onClick = { onSubmit(request.requestId) }
                     )
@@ -182,8 +182,8 @@ fun RequestDialog(
                         modifier = Modifier.weight(1f),
                         text = dismissButtonText,
                         color = localColors.error,
-                        enabled = !acceptRequestLoading || !declineRequestLoading,
-                        isLoading = declineRequestLoading,
+                        enabled = !acceptRequestLoading || !cancelRequestLoading,
+                        isLoading = cancelRequestLoading,
                         onClick = { onDismiss(request.requestId) }
                     )
                 }
@@ -220,7 +220,7 @@ fun RequestDialogPreview() {
             onDismissRequest = {}, onSubmit = {}, onDismiss = {},
             timerState = "00:23",
             acceptRequestLoading = false,
-            declineRequestLoading = false,
+            cancelRequestLoading = false,
         )
     }
 }

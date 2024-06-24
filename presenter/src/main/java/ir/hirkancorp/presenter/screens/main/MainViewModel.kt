@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
 import ir.hirkancorp.domain.job_request.use_cases.AcceptJobRequestUseCase
+import ir.hirkancorp.domain.job_request.use_cases.CancelJobRequestUseCase
 import ir.hirkancorp.domain.provider_location.use_cases.ProviderLocationUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
@@ -59,7 +60,8 @@ class MainViewModel(
     private val updateDeviceUseCase: UpdateDeviceUseCase,
     private val workRadiusUseCase: UpdateWorkRadiusUseCase,
     private val providerLocationUseCase: ProviderLocationUseCase,
-    private val acceptJobRequestUseCase: AcceptJobRequestUseCase
+    private val acceptJobRequestUseCase: AcceptJobRequestUseCase,
+    private val cancelJobRequestUseCase: CancelJobRequestUseCase
 ) : ViewModel(), KoinComponent {
 
 
@@ -96,6 +98,34 @@ class MainViewModel(
         is MainScreenEvent.HandleNotification -> handleNotification(bundle = event.bundle)
         is MainScreenEvent.ShowJobRequestDialog -> showJobRequestDialog(show = event.show, job = event.job)
         is MainScreenEvent.AcceptRequest -> acceptRequest(requestId = event.requestId)
+        is MainScreenEvent.CancelRequest -> cancelRequest(requestId = event.requestId)
+    }
+
+    private fun cancelRequest(requestId: Int) {
+        viewModelScope.launch {
+            cancelJobRequestUseCase.invoke(requestId = requestId).collect { result ->
+                when(result) {
+                    is Loading -> {
+                        state = state.copy(cancelRequestLoading = true)
+                    }
+                    is Success -> {
+                        state = state.copy(
+                            requestNotificationState = NotificationEvent.CancelRequest,
+                            cancelRequestLoading = false
+                        )
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.data.orEmpty()))
+                    }
+                    is Error -> {
+                        state = state.copy(
+                            showJobRequestDialog = false,
+                            cancelRequestLoading = false
+                        )
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+
+                    }
+                }
+            }
+        }
     }
 
     private fun acceptRequest(requestId: Int) {
@@ -108,11 +138,17 @@ class MainViewModel(
                     is Success -> {
                         // Navigate to job progress should implemented
                         _uiEvent.send(UiEvent.ShowSnackBar("Navigate to job progress should implemented"))
-                        state = state.copy(acceptRequestLoading = false)
+                        state = state.copy(
+                            showJobRequestDialog = false,
+                            acceptRequestLoading = false
+                        )
                     }
                     is Error -> {
                         _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
-                        state = state.copy(acceptRequestLoading = false)
+                        state = state.copy(
+                            showJobRequestDialog = false,
+                            acceptRequestLoading = false
+                        )
                     }
                 }
             }
