@@ -111,5 +111,17 @@
     <string name="request_dialog_rating">امتیاز: %1$s</string>
     <string name="notification_channel_name">Ruzmozd Provider</string>
     <string name="firebase_messaging_service_notification_title">درخواست جدید - %1$s</string>
-    <string name="main_screen_request_dialog_title_new_request">درخواست جدید</string>
+    <string name="main_screen_request_dialog_title_new_request">درخواست جدید</string><string name="job_progress_screen_title">وضعیت درخواست</string>
+    <string name="job_progress_screen_request_accepted">شما درخواست را پذیرفتید</string>
+    <string name="job_progress_screen_provider_arrived">شما به مقصد رسیدید</string>
+    <string name="job_progress_screen_request_started_the_job">شروع انجام کار</string>
+    <string name="job_progress_screen_request_job_compeleted">اتمام کار</string>
+    <string name="job_progress_screen_job_canceled_by_provider">درخواست توسط کارگر لغو شد</string>
+    <string name="job_progress_screen_job_completed">خدمت توسظ کارگر تکمیل شد</string>
+    <string name="job_progress_screen_rating_provider_name">کارفرما</string>
+    <string name="job_progress_screen_rate_provider">به عملکرد %1$s امتیار دهید</string>
+    <string name="job_progress_screen_rating_success">نظر شما با موفقیت ثبت شد</string>
+    <string name="job_progress_screen_write_your_comment">دیدگاهتان را بنویسید …</string>
+    <string name="all_error_loading_data">خطا در دریافت اطلاعات</string>
+
 </resources>

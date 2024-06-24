@@ -27,6 +27,7 @@ fun TextInput(
     leadingIcon: @Composable (() -> Unit)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     isError: Boolean = false,
+    lines: Int = 1,
     currentValue: String,
     onValueChange: (String) -> Unit
 ) {
@@ -37,6 +38,8 @@ fun TextInput(
         singleLine = true,
         isError = isError,
         enabled = enabled,
+        maxLines = lines,
+        minLines = lines,
         leadingIcon = leadingIcon,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = 0.05f),
