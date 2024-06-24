@@ -1,6 +1,7 @@
 package ir.hirkancorp.domain.di
 
 import ir.hirkancorp.domain.auth.di.authModule
+import ir.hirkancorp.domain.job_progress.di.jobProgressModule
 import ir.hirkancorp.domain.job_request.di.jobRequestModule
 import ir.hirkancorp.domain.login.di.loginUseCaseModule
 import ir.hirkancorp.domain.logout.di.logOutModule
@@ -27,6 +28,7 @@ val domainModule = module {
         updateDeviceModule,
         workRadiusModule,
         providerLocationModule,
-        jobRequestModule
+        jobRequestModule,
+        jobProgressModule
     )
 }
