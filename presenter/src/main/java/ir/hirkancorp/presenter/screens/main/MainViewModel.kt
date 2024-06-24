@@ -139,7 +139,7 @@ class MainViewModel(
                         // Navigate to job progress should implemented
                         _uiEvent.send(UiEvent.ShowSnackBar("Navigate to job progress should implemented"))
                         state = state.copy(
-                            showJobRequestDialog = false,
+                            requestNotificationState = NotificationEvent.Idle,
                             acceptRequestLoading = false
                         )
                     }

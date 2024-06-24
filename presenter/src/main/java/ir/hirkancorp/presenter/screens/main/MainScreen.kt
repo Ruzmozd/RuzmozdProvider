@@ -160,7 +160,7 @@ fun MainScreen(
             }
 
             when(state.requestNotificationState) {
-                is NotificationEvent.Idle -> {}
+                is NotificationEvent.Idle -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = false, job = null))
                 is NotificationEvent.CancelRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = false, job = null))
                 is NotificationEvent.JobRequest -> viewModel.onEvent(MainScreenEvent.ShowJobRequestDialog(show = true, job = state.requestNotificationState.job))
             }
