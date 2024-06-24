@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface JobRequestRepository {
 
-    suspend fun acceptJob(requestId: Int): Flow<ApiResult<JobProgress>>
+    suspend fun acceptJobRequest(requestId: Int): Flow<ApiResult<JobProgress>>
+
+    suspend fun cancelJobRequest(requestId: Int): Flow<ApiResult<String>>
 
 }

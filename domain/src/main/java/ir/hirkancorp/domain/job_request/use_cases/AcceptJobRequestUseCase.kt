@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 class AcceptJobRequestUseCase(private val jobRequestRepository: JobRequestRepository) {
 
-    suspend operator fun invoke(requestId: Int): Flow<ApiResult<JobProgress>> = jobRequestRepository.acceptJob(requestId = requestId)
+    suspend operator fun invoke(requestId: Int): Flow<ApiResult<JobProgress>> = jobRequestRepository.acceptJobRequest(requestId = requestId)
 
 }

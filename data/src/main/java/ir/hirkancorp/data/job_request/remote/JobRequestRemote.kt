@@ -8,8 +8,13 @@ import io.ktor.client.statement.HttpResponse
 
 class JobRequestRemote(private val httpClient: HttpClient) {
 
-    suspend fun acceptJob(requestId: Int): HttpResponse = httpClient.get {
+    suspend fun acceptJobrequest(requestId: Int): HttpResponse = httpClient.get {
         url("accept_request")
+        parameter("request_id", requestId)
+    }
+
+    suspend fun cancelJobRequest(requestId: Int): HttpResponse = httpClient.get {
+        url("cancel_job_request")
         parameter("request_id", requestId)
     }
 
