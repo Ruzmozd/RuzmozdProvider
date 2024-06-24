@@ -42,7 +42,6 @@ fun JobProgressScreen(
     modifier: Modifier = Modifier,
     jobProgressScreenViewModel: JobProgressScreenViewModel = koinViewModel(),
     jobId: Int?,
-    navigateToProvidersScreen: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -65,7 +64,6 @@ fun JobProgressScreen(
             if (ratingSuccess.second) {
                 sheetState.hide()
                 Toast.makeText(context, ratingSuccess.first, Toast.LENGTH_SHORT ).show()
-                navigateToProvidersScreen()
             }
         }
     }
@@ -93,7 +91,6 @@ fun JobProgressScreen(
                 submitButtonText = stringResource(id = R.string.all_submit),
                 onConfirmation = {
                     jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.HideDialog)
-                    navigateToProvidersScreen()
                 })
 
             null -> {}

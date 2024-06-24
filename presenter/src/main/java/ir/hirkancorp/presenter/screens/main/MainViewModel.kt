@@ -43,6 +43,7 @@ import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstant
 import ir.hirkancorp.presenter.core.utils.CountDownTimerUtil
 import ir.hirkancorp.presenter.core.utils.TimeUtils.toTimeFormat
 import ir.hirkancorp.presenter.core.utils.UiEvent
+import ir.hirkancorp.presenter.nav_graphs.main.MainScreens
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.CheckIfAuthenticate
 import ir.hirkancorp.presenter.screens.main.MainScreenEvent.HandleMissedLocationPermission
 import kotlinx.coroutines.channels.Channel
@@ -136,8 +137,7 @@ class MainViewModel(
                         state = state.copy(acceptRequestLoading = true)
                     }
                     is Success -> {
-                        // Navigate to job progress should implemented
-                        _uiEvent.send(UiEvent.ShowSnackBar("Navigate to job progress should implemented"))
+                        _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.route, listOf(result.data)))
                         state = state.copy(
                             requestNotificationState = NotificationEvent.Idle,
                             acceptRequestLoading = false
@@ -279,7 +279,9 @@ class MainViewModel(
                 when(result) {
                     is Success -> {
                         state = state.copy(updateDeviceLoading = false)
-                        result.data?.jobId?.let { _uiEvent.send(UiEvent.Navigate("")) } // navigate to job progress
+                        result.data?.jobId?.let {
+                            _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.route, listOf(result.data?.jobId)))
+                        } // navigate to job progress
                     }
                     is Error -> {
                         state =  state.copy(updateDeviceLoading = false)

@@ -55,7 +55,8 @@ import org.osmdroid.views.MapView
 fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
-    navigateToLoginScreen: () -> Unit
+    navigateToLoginScreen: () -> Unit,
+    navigateToJobScreen: (jobId: Int) -> Unit,
 ) {
 
     val locationPermission = mutableListOf(
