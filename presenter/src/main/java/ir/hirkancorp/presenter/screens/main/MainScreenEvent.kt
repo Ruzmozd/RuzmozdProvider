@@ -17,5 +17,6 @@ sealed class MainScreenEvent {
     data class UpdateWorkRadius(val radius: Int) : MainScreenEvent()
     data class HandleNotification(val bundle: Bundle) : MainScreenEvent()
     data class ShowJobRequestDialog(val show: Boolean, val job: BookJob?) : MainScreenEvent()
+    data class AcceptRequest(val requestId: Int) : MainScreenEvent()
 
 }

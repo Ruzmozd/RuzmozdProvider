@@ -13,5 +13,5 @@ val viewModelModule = module {
     viewModel { RegisterViewModel(get(), get()) }
     viewModel { UploadDocumentViewModel(get(), get()) }
     viewModel { ProfileImageViewModel(get()) }
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

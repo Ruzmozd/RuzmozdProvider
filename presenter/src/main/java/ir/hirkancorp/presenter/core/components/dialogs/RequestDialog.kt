@@ -44,10 +44,12 @@ fun RequestDialog(
     request: BookJob,
     timerState: String,
     icon: ImageVector = Icons.Default.Info,
-    submitButtonText: String = stringResource(id = R.string.all_submit),
-    onSubmit: () -> Unit,
-    dismissButtonText: String = stringResource(id = R.string.all_dismis),
-    onDismiss: () -> Unit,
+    acceptRequestLoading: Boolean = false,
+    declineRequestLoading: Boolean = false,
+    submitButtonText: String = stringResource(id = R.string.request_dialog_accept),
+    onSubmit: (requestId: Int) -> Unit,
+    dismissButtonText: String = stringResource(id = R.string.request_dialog_decline),
+    onDismiss: (requestId: Int) -> Unit,
     onDismissRequest: () -> Unit = {},
 ) {
     val spacing = LocalSpacing.current
@@ -167,17 +169,25 @@ fun RequestDialog(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    ColoredButton(
+                        modifier = Modifier.weight(1f),
+                        text = submitButtonText,
+                        color = localColors.success,
+                        enabled = !acceptRequestLoading || !declineRequestLoading,
+                        isLoading = acceptRequestLoading,
+                        onClick = { onSubmit(request.requestId) }
+                    )
+                    Spacer(modifier = Modifier.width(spacing.spaceMedium))
+                    ColoredButton(
+                        modifier = Modifier.weight(1f),
+                        text = dismissButtonText,
+                        color = localColors.error,
+                        enabled = !acceptRequestLoading || !declineRequestLoading,
+                        isLoading = declineRequestLoading,
+                        onClick = { onDismiss(request.requestId) }
+                    )
                 }
-                ColoredButton(
-                    text = submitButtonText,
-                    color = localColors.success,
-                    onClick = onSubmit
-                )
-                ColoredButton(
-                    text = dismissButtonText,
-                    color = localColors.error,
-                    onClick = onDismiss
-                )
+
             }
         }
     }
@@ -200,14 +210,17 @@ val request = BookJob(
 @Composable
 fun RequestDialogPreview() {
     RuzmozdProviderTheme(
-        darkTheme = true
+        darkTheme = false
     ) {
-//        RequestDialog(
-//            title = "درخواست جدید",
-//            request = request,
-//            submitButtonText = stringResource(id = R.string.request_dialog_accept),
-//            dismissButtonText = stringResource(id = R.string.request_dialog_decline),
-//            onDismissRequest = {}, onSubmit = {}, onDismiss = {},
-//        )
+        RequestDialog(
+            title = "درخواست جدید",
+            request = request,
+            submitButtonText = stringResource(id = R.string.request_dialog_accept),
+            dismissButtonText = stringResource(id = R.string.request_dialog_decline),
+            onDismissRequest = {}, onSubmit = {}, onDismiss = {},
+            timerState = "00:23",
+            acceptRequestLoading = false,
+            declineRequestLoading = false,
+        )
     }
 }

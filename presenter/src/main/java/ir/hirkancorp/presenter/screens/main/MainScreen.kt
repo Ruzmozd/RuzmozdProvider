@@ -21,31 +21,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
-import ir.hirkancorp.domain.request.model.BookJob
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.PermissionComponent
 import ir.hirkancorp.presenter.core.components.dialogs.RequestDialog
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.firebaseMessaging.utils.FirebaseUtils
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_ADDRESS
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_DISTANCE
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_FARE_TYPE
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_NUMBER
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_RATING
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_SERVICE_NAME
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_TOTAL_FARE
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOKING_USER_NAME
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.BOOK_TYPE
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_ID
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.JOB_REQUEST_ID
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_BOOK_JOB
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_JOB
-import ir.hirkancorp.presenter.core.firebaseMessaging.utils.NotificationConstants.TYPE_CANCEL_REQUEST
 import ir.hirkancorp.presenter.core.utils.LocationUtil
 import ir.hirkancorp.presenter.core.utils.UiEvent
 import ir.hirkancorp.presenter.core.utils.UiText
@@ -233,7 +216,11 @@ fun MainScreen(
                             title = stringResource(R.string.main_screen_request_dialog_title_new_request),
                             request = job,
                             timerState = state.timerState,
-                            onSubmit = { /*TODO*/ },
+                            acceptRequestLoading = state.acceptRequestLoading,
+                            declineRequestLoading = state.declineRequestLoading,
+                            onSubmit = { requestId ->
+                                viewModel.onEvent(MainScreenEvent.AcceptRequest(requestId))
+                            },
                             onDismiss = { /*TODO*/ }
                         )
                     }

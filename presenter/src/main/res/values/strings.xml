@@ -104,7 +104,7 @@
     <string name="firebase_messaging_service_cancel_request_reason_by_user">رخواست به دلایل نامشخص لغو شد</string>
     <string name="firebase_messaging_service_cancel_request_reason_unknown">رخواست بتوسط کاربر لغو شد</string>
     <string name="request_dialog_name">درخواست از طرف: %1$s</string>
-    <string name="request_dialog_accept">انجام میدهم</string>
+    <string name="request_dialog_accept">پذیرفتن</string>
     <string name="request_dialog_decline">رد کردن</string>
     <string name="request_dialog_hours">"ساعت: %1$s "</string>
     <string name="request_dialog_days">"زوز: %1$s "</string>

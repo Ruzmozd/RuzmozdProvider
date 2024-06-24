@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.auth.use_cases.AuthUseCase
+import ir.hirkancorp.domain.job_request.use_cases.AcceptJobRequestUseCase
 import ir.hirkancorp.domain.provider_location.use_cases.ProviderLocationUseCase
 import ir.hirkancorp.domain.provider_profile.use_cases.ProviderProfileUseCase
 import ir.hirkancorp.domain.provider_status.use_cases.ProviderStatusUseCase
@@ -57,7 +58,8 @@ class MainViewModel(
     private val providerStatusUseCase: ProviderStatusUseCase,
     private val updateDeviceUseCase: UpdateDeviceUseCase,
     private val workRadiusUseCase: UpdateWorkRadiusUseCase,
-    private val providerLocationUseCase: ProviderLocationUseCase
+    private val providerLocationUseCase: ProviderLocationUseCase,
+    private val acceptJobRequestUseCase: AcceptJobRequestUseCase
 ) : ViewModel(), KoinComponent {
 
 
@@ -93,6 +95,28 @@ class MainViewModel(
         is MainScreenEvent.UpdateWorkRadius -> updateWorkRadius(radius = event.radius)
         is MainScreenEvent.HandleNotification -> handleNotification(bundle = event.bundle)
         is MainScreenEvent.ShowJobRequestDialog -> showJobRequestDialog(show = event.show, job = event.job)
+        is MainScreenEvent.AcceptRequest -> acceptRequest(requestId = event.requestId)
+    }
+
+    private fun acceptRequest(requestId: Int) {
+        viewModelScope.launch {
+            acceptJobRequestUseCase.invoke(requestId = requestId).collect { result ->
+                 when(result) {
+                    is Loading -> {
+                        state = state.copy(acceptRequestLoading = true)
+                    }
+                    is Success -> {
+                        // Navigate to job progress should implemented
+                        _uiEvent.send(UiEvent.ShowSnackBar("Navigate to job progress should implemented"))
+                        state = state.copy(acceptRequestLoading = false)
+                    }
+                    is Error -> {
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                        state = state.copy(acceptRequestLoading = false)
+                    }
+                }
+            }
+        }
     }
 
     private fun showJobRequestDialog(show: Boolean, job: BookJob?) {
