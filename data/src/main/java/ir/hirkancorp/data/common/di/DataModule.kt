@@ -1,6 +1,7 @@
 package ir.hirkancorp.data.common.di
 
 import ir.hirkancorp.data.auth.di.authModule
+import ir.hirkancorp.data.job_request.di.jobRequestModule
 import ir.hirkancorp.data.login.di.loginModule
 import ir.hirkancorp.data.logout.di.logOutModule
 import ir.hirkancorp.data.preferences.di.preferencesModule
@@ -28,6 +29,7 @@ val dataModule = module {
         providerStatusModule,
         updateDeviceModule,
         workRadiusModule,
-        providerLocationModule
+        providerLocationModule,
+        jobRequestModule
     )
 }
