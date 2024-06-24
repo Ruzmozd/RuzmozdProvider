@@ -1,6 +1,7 @@
 package ir.hirkancorp.domain.di
 
 import ir.hirkancorp.domain.auth.di.authModule
+import ir.hirkancorp.domain.job_request.di.jobRequestModule
 import ir.hirkancorp.domain.login.di.loginUseCaseModule
 import ir.hirkancorp.domain.logout.di.logOutModule
 import ir.hirkancorp.domain.profile_image.di.profileImageUseCaseModule
@@ -25,6 +26,7 @@ val domainModule = module {
         providerStatusModule,
         updateDeviceModule,
         workRadiusModule,
-        providerLocationModule
+        providerLocationModule,
+        jobRequestModule
     )
 }
