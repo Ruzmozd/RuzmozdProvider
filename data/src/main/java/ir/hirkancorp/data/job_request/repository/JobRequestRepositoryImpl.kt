@@ -9,21 +9,19 @@ import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
 import ir.hirkancorp.data.common.api_utils.commonRequest
 import ir.hirkancorp.data.common.model.EmptyDataHttpResponseModel
 import ir.hirkancorp.data.common.model.HttpResponseModel
-import ir.hirkancorp.data.job_request.mapper.toDomain
-import ir.hirkancorp.data.job_request.model.JobProgressData
+import ir.hirkancorp.data.job_request.model.AcceptJobDto
 import ir.hirkancorp.data.job_request.remote.JobRequestRemote
-import ir.hirkancorp.domain.job_request.model.JobProgress
 import ir.hirkancorp.domain.job_request.repository.JobRequestRepository
 import ir.hirkancorp.domain.utils.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 class JobRequestRepositoryImpl(private val jobRequestRemote: JobRequestRemote): JobRequestRepository {
 
-    override suspend fun acceptJobRequest(requestId: Int): Flow<ApiResult<JobProgress>> = commonRequest(
+    override suspend fun acceptJobRequest(requestId: Int): Flow<ApiResult<Int>> = commonRequest(
         httpResponse = { jobRequestRemote.acceptJobrequest(requestId = requestId) },
         errorCodes = listOf(Unauthorized, NotFound, Conflict, UnprocessableEntity),
         successAction = Pair(OK) { response ->
-            response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
+            response.body<HttpResponseModel<AcceptJobDto>>().data.jobId ?: 0
         }
     )
 
