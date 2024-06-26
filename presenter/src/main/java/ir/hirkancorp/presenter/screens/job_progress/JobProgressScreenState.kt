@@ -9,7 +9,11 @@ data class JobProgressScreenState(
     val dialog: JobProgressScreenDialog? = null,
     val jobId: Int = 0,
     val ratingLoading: Boolean = false,
-    val ratingError: String = ""
+    val ratingError: String = "",
+    val passedStep: Int = 0,
+    val nextStep: Int = 0,
+    val nextStepButtonText: String = "",
+    val goToNextStep: Boolean = false
 )
 
 

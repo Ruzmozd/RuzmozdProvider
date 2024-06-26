@@ -6,5 +6,6 @@ sealed class JobProgressScreenEvent {
     data class JobCompleted(val message: String): JobProgressScreenEvent()
     data object HideDialog: JobProgressScreenEvent()
     data class Rate(val rate: Int, val comment: String): JobProgressScreenEvent()
+    data object NextStep : JobProgressScreenEvent()
 
 }

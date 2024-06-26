@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.hirkancorp.presenter.R
+import ir.hirkancorp.presenter.core.components.ButtonWithProgressIndicator
 import ir.hirkancorp.presenter.core.components.ErrorPage
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.state.HttpRequestState
@@ -52,18 +53,18 @@ fun JobProgressScreen(
         confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = false
     )
-    
+
     LaunchedEffect(key1 = true) {
         jobId?.let { id ->
             jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.GetJobProgress(id))
         }
     }
-    
+
     LaunchedEffect(key1 = jobProgressScreenViewModel.navigateToHomeScreen) {
         jobProgressScreenViewModel.navigateToHomeScreen.collectLatest { ratingSuccess ->
             if (ratingSuccess.second) {
                 sheetState.hide()
-                Toast.makeText(context, ratingSuccess.first, Toast.LENGTH_SHORT ).show()
+                Toast.makeText(context, ratingSuccess.first, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -105,7 +106,12 @@ fun JobProgressScreen(
                 isLoading = state.ratingLoading,
                 rateError = state.ratingError
             ) { rate: Int, comment: String ->
-                jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.Rate(rate = rate, comment = comment))
+                jobProgressScreenViewModel.onEvent(
+                    JobProgressScreenEvent.Rate(
+                        rate = rate,
+                        comment = comment
+                    )
+                )
             }
         }) {
         Scaffold(
@@ -117,18 +123,31 @@ fun JobProgressScreen(
             Column(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
                 when (state.jobProgress) {
-                    is HttpRequestState.ResponseState -> state.jobProgress.data?.forEachIndexed { index, jobState ->
-                        if (index > 0) Spacer(
-                            modifier = Modifier
-                                .padding(start = 32.dp)
-                                .width(1.dp)
-                                .height(32.dp)
-                                .background(if (jobState.status) MaterialTheme.colors.primary else Color.Transparent)
+                    is HttpRequestState.ResponseState -> {
+                        state.jobProgress.data?.forEachIndexed { index, jobState ->
+                            if (index > 0) Spacer(
+                                modifier = Modifier
+                                    .padding(start = 32.dp)
+                                    .width(1.dp)
+                                    .height(32.dp)
+                                    .background(if (jobState.status) MaterialTheme.colors.primary else Color.Transparent)
+                            )
+                            ProgressItem(
+                                title = jobState.jobStatusMsg,
+                                currentState = jobState.status
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        ButtonWithProgressIndicator(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = state.nextStepButtonText,
+                            isLoading = state.goToNextStep,
+                            onClick = { jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.NextStep) },
                         )
-                        ProgressItem(title = jobState.jobStatusMsg, currentState = jobState.status)
+                        
                     }
 
                     is HttpRequestState.ErrorState -> ErrorPage(
@@ -168,7 +187,6 @@ fun JobProgressScreen(
             }
         }
     }
-
 
 
 }
