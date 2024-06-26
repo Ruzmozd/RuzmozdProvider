@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AcceptJobDto(
-    @SerialName("jobProgress")
+    @SerialName("jobId")
     val jobId: Int? = 0
 )
