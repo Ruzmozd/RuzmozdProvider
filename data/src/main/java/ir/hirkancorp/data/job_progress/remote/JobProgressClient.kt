@@ -13,4 +13,31 @@ class JobProgressClient(private val httpClient: HttpClient) {
         parameter("job_id", jobId)
     }
 
+    suspend fun arriveNow(jobId: Int): HttpResponse = httpClient.get {
+        url("arrive_now")
+        parameter("job_id", jobId)
+    }
+
+    suspend fun beginJob(jobId: Int): HttpResponse = httpClient.get {
+        url("begin_job")
+        parameter("job_id", jobId)
+    }
+
+    suspend fun endJob(jobId: Int): HttpResponse = httpClient.get {
+        url("end_job")
+        parameter("job_id", jobId)
+    }
+
+    suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComments: String): HttpResponse = httpClient.get {
+        url("cancel_job")
+        parameter("job_id", jobId)
+        parameter("reason_id", reasonId)
+        parameter("cancel_comments", cancelComments)
+    }
+
+    suspend fun cancelReasons(jobId: Int): HttpResponse = httpClient.get {
+        url("cancel_reasons")
+        parameter("job_id", jobId)
+    }
+
 }

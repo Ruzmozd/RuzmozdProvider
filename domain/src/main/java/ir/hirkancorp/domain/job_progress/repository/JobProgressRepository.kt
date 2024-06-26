@@ -7,5 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface JobProgressRepository {
 
     suspend fun getJobProgress(jobId: Int): Flow<ApiResult<JobProgress>>
+    suspend fun arriveNow(jobId: Int): Flow<ApiResult<JobProgress>>
+    suspend fun beginJob(jobId: Int): Flow<ApiResult<JobProgress>>
+    suspend fun endJob(jobId: Int): Flow<ApiResult<JobProgress>>
 
 }

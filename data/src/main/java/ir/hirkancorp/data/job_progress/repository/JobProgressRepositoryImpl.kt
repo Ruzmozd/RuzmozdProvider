@@ -22,5 +22,30 @@ class JobProgressRepositoryImpl(private val jobProgressClient: JobProgressClient
         errorCodes = listOf(Unauthorized, NotFound, UnprocessableEntity),
         successAction = Pair(OK) { response ->
             response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
-        })
+        }
+    )
+
+    override suspend fun arriveNow(jobId: Int): Flow<ApiResult<JobProgress>> = commonRequest(
+        httpResponse = { jobProgressClient.arriveNow(jobId) },
+        errorCodes = listOf(Unauthorized, UnprocessableEntity),
+        successAction = Pair(OK) { response ->
+            response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
+        }
+    )
+
+    override suspend fun beginJob(jobId: Int): Flow<ApiResult<JobProgress>> = commonRequest(
+        httpResponse = { jobProgressClient.beginJob(jobId) },
+        errorCodes = listOf(Unauthorized, UnprocessableEntity),
+        successAction = Pair(OK) { response ->
+            response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
+        }
+    )
+
+    override suspend fun endJob(jobId: Int): Flow<ApiResult<JobProgress>> = commonRequest(
+        httpResponse = { jobProgressClient.endJob(jobId) },
+        errorCodes = listOf(Unauthorized, UnprocessableEntity),
+        successAction = Pair(OK) { response ->
+            response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
+        }
+    )
 }
