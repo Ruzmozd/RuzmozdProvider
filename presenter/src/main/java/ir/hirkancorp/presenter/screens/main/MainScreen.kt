@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.INACTIVE
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.PENDING
 import ir.hirkancorp.domain.provider_profile.models.ProviderStatusEnum.REJECTED
@@ -56,7 +57,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
     navigateToLoginScreen: () -> Unit,
-    navigateToJobScreen: (jobId: Int) -> Unit,
+    navController: NavHostController,
 ) {
 
     val locationPermission = mutableListOf(
@@ -97,7 +98,9 @@ fun MainScreen(
                     snackbarHostState.showSnackbar(uiEvent.message)
                 }
 
-                is UiEvent.Navigate -> {}
+                is UiEvent.Navigate -> {
+                    navController.navigate(uiEvent.route)
+                }
                 UiEvent.NavigateUp -> {}
             }
         }

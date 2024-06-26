@@ -5,12 +5,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ir.hirkancorp.domain.job_progress.use_cases.JobProgressUseCase
 import ir.hirkancorp.presenter.nav_graphs.Graphs
 import ir.hirkancorp.presenter.nav_graphs.auth.authNav
 import ir.hirkancorp.presenter.nav_graphs.settings.settingsNav
 import ir.hirkancorp.presenter.screens.job_progress.JobProgressScreen
-import ir.hirkancorp.presenter.screens.job_progress.JobProgressScreenViewModel
 import ir.hirkancorp.presenter.screens.main.MainScreen
 import ir.hirkancorp.presenter.screens.requests.RequestsScreen
 
@@ -33,12 +31,10 @@ fun MainNavGraph(
                         navigate(Graphs.AUTH)
                     }
                 },
-                navigateToJobScreen = { jobId ->
-                    navHostController.navigate(MainScreens.JobProgressScreen.createRoute(jobId = jobId))
-                }
+                navController = navHostController
             )
         }
-        composable(route = MainScreens.MainScreen.route) {
+        composable(route = MainScreens.JobProgressScreen.route) {
             val jobId = it.arguments?.getString(MainScreens.JOB_ID)?.toInt() ?: 0
             JobProgressScreen(jobId = jobId)
         }

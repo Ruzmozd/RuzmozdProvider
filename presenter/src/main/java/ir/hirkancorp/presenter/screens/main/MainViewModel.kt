@@ -137,11 +137,11 @@ class MainViewModel(
                         state = state.copy(acceptRequestLoading = true)
                     }
                     is Success -> {
-                        _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.route, listOf(result.data)))
                         state = state.copy(
                             requestNotificationState = NotificationEvent.Idle,
-                            acceptRequestLoading = false
+                            acceptRequestLoading = false,
                         )
+                        _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.createRoute(result.data ?: 0)))
                     }
                     is Error -> {
                         _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
@@ -280,7 +280,7 @@ class MainViewModel(
                     is Success -> {
                         state = state.copy(updateDeviceLoading = false)
                         result.data?.jobId?.let {
-                            _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.route, listOf(result.data?.jobId)))
+                            _uiEvent.send(UiEvent.Navigate(MainScreens.JobProgressScreen.createRoute(it)))
                         } // navigate to job progress
                     }
                     is Error -> {
