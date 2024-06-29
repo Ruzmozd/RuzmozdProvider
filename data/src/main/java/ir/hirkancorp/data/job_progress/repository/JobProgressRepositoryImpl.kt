@@ -6,10 +6,13 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
 import ir.hirkancorp.data.common.api_utils.commonRequest
+import ir.hirkancorp.data.common.model.EmptyDataHttpResponseModel
 import ir.hirkancorp.data.common.model.HttpResponseModel
 import ir.hirkancorp.data.job_progress.mapper.toDomain
+import ir.hirkancorp.data.job_progress.model.CancelJobReasonsData
 import ir.hirkancorp.data.job_progress.model.JobProgressData
 import ir.hirkancorp.data.job_progress.remote.JobProgressClient
+import ir.hirkancorp.domain.job_progress.model.CancelJobReasons
 import ir.hirkancorp.domain.job_progress.model.JobProgress
 import ir.hirkancorp.domain.job_progress.repository.JobProgressRepository
 import ir.hirkancorp.domain.utils.ApiResult
@@ -48,4 +51,25 @@ class JobProgressRepositoryImpl(private val jobProgressClient: JobProgressClient
             response.body<HttpResponseModel<JobProgressData>>().data.toDomain()
         }
     )
+
+    override suspend fun cancelReasons(): Flow<ApiResult<CancelJobReasons>> = commonRequest(
+        httpResponse = { jobProgressClient.cancelReasons() },
+        errorCodes = listOf(Unauthorized),
+        successAction = Pair(OK) { response ->
+            response.body<HttpResponseModel<CancelJobReasonsData>>().data.toDomain()
+        }
+    )
+
+    override suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComment: String): Flow<ApiResult<String>> = commonRequest(
+        httpResponse = { jobProgressClient.cancelJob(
+            jobId = jobId,
+            reasonId = reasonId,
+            cancelComments = cancelComment
+        ) },
+        errorCodes = listOf(Unauthorized),
+        successAction = Pair(OK) { response ->
+            response.body<EmptyDataHttpResponseModel>().statusMessage
+        }
+    )
+
 }

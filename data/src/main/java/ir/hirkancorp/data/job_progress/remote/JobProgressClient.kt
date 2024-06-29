@@ -35,9 +35,8 @@ class JobProgressClient(private val httpClient: HttpClient) {
         parameter("cancel_comments", cancelComments)
     }
 
-    suspend fun cancelReasons(jobId: Int): HttpResponse = httpClient.get {
+    suspend fun cancelReasons(): HttpResponse = httpClient.get {
         url("cancel_reasons")
-        parameter("job_id", jobId)
     }
 
 }
