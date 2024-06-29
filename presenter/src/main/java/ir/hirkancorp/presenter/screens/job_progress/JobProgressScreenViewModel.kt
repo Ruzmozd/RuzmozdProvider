@@ -68,7 +68,10 @@ class JobProgressScreenViewModel(
                 cancelComment = state.cancelReasonComment
             ).collect { result ->
                 when(result) {
-                    is Error -> _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                    is Error -> {
+                        state = state.copy(bottomSheetType = null)
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                    }
                     is Loading -> state = state.copy(cancelJobLoading = true)
                     is Success -> {
                         state = state.copy(bottomSheetType = null)
