@@ -15,5 +15,5 @@ val viewModelModule = module {
     viewModel { UploadDocumentViewModel(get(), get()) }
     viewModel { ProfileImageViewModel(get()) }
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { JobProgressScreenViewModel(get(), get(), get(), get()) }
+    viewModel { JobProgressScreenViewModel(get(), get(), get(), get(), get(), get()) }
 }

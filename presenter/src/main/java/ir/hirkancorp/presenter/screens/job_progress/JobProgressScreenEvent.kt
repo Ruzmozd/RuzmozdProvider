@@ -7,5 +7,8 @@ sealed class JobProgressScreenEvent {
     data object HideDialog: JobProgressScreenEvent()
     data class Rate(val rate: Int, val comment: String): JobProgressScreenEvent()
     data object NextStep : JobProgressScreenEvent()
+    data object OpenRatingsSheet : JobProgressScreenEvent()
+    data object OpenCancelReasonsSheet : JobProgressScreenEvent()
+    data class CancelJob(val reasonId: Int, val comment: String?) : JobProgressScreenEvent()
 
 }

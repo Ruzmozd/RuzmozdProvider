@@ -120,8 +120,11 @@
     <string name="job_progress_screen_job_completed">خدمت توسظ کارگر تکمیل شد</string>
     <string name="job_progress_screen_rating_provider_name">کارفرما</string>
     <string name="job_progress_screen_rate_provider">به عملکرد %1$s امتیار دهید</string>
+    <string name="job_progress_screen_cancel_reason_sheet_title">چرا میخواهید این درخواست را لغو کنید؟</string>
+    <string name="job_progress_screen_cancel_reason_sheet_text_input_hint">توضیحات</string>
     <string name="job_progress_screen_rating_success">نظر شما با موفقیت ثبت شد</string>
     <string name="job_progress_screen_write_your_comment">دیدگاهتان را بنویسید …</string>
+    <string name="job_progress_screen_cancel_job_button_text">لغو درخواست</string>
     <string name="all_error_loading_data">خطا در دریافت اطلاعات</string>
 
 </resources>

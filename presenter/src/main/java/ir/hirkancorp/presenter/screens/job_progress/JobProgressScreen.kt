@@ -20,6 +20,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,9 +29,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.components.ButtonWithProgressIndicator
+import ir.hirkancorp.presenter.core.components.ColoredButton
 import ir.hirkancorp.presenter.core.components.ErrorPage
 import ir.hirkancorp.presenter.core.components.dialogs.RuzmozdDialog
 import ir.hirkancorp.presenter.core.state.HttpRequestState
+import ir.hirkancorp.presenter.core.theme.localAlertColors
+import ir.hirkancorp.presenter.core.utils.UiEvent
+import ir.hirkancorp.presenter.screens.job_progress.components.CancelJobComponent
 import ir.hirkancorp.presenter.screens.job_progress.components.ProgressItem
 import ir.hirkancorp.presenter.screens.job_progress.components.RatingComponent
 import ir.hirkancorp.presenter.screens.register.components.RuzmozdTopAppBar
@@ -43,6 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 fun JobProgressScreen(
     modifier: Modifier = Modifier,
     jobProgressScreenViewModel: JobProgressScreenViewModel = koinViewModel(),
+    naviogate: (route: String?) -> Unit,
     jobId: Int?,
 ) {
 
@@ -76,6 +82,16 @@ fun JobProgressScreen(
         }
     }
 
+    LaunchedEffect(key1 = jobProgressScreenViewModel.uiEvent) {
+        jobProgressScreenViewModel.uiEvent.collectLatest { event ->
+            when(event) {
+                is UiEvent.Navigate -> naviogate(event.route)
+                is UiEvent.ShowSnackBar -> {}
+                UiEvent.NavigateUp -> naviogate(null)
+            }
+        }
+    }
+
     if (state.showDialog) {
         when (state.dialog) {
             is JobProgressScreenDialog.JobCompleted -> RuzmozdDialog(
@@ -103,27 +119,43 @@ fun JobProgressScreen(
         sheetState = sheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            RatingComponent(
-                isLoading = state.ratingLoading,
-                rateError = state.ratingError
-            ) { rate: Int, comment: String ->
-                jobProgressScreenViewModel.onEvent(
-                    JobProgressScreenEvent.Rate(
-                        rate = rate,
-                        comment = comment
-                    )
+            when (state.bottomSheetType) {
+                BottomSheetType.CancelJobType -> CancelJobComponent(
+                    isLoading = state.cancelJobLoading,
+                    reasons = state.cancelReasons,
+                    errorLoadingReasons = { message ->
+                        scope.launch { sheetState.hide() }
+                    },
+                    onSubmitClick = { id: Int, comment: String ->
+                        jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.CancelJob(reasonId = id, comment = comment))
+                    }
                 )
+                BottomSheetType.RatingType -> RatingComponent(
+                    isLoading = state.ratingLoading,
+                    rateError = state.ratingError
+                ) { rate: Int, comment: String ->
+                    jobProgressScreenViewModel.onEvent(
+                        JobProgressScreenEvent.Rate(
+                            rate = rate,
+                            comment = comment
+                        )
+                    )
+                }
+                null -> SideEffect { scope.launch { if (sheetState.isVisible) sheetState.hide() } }
             }
+
         }) {
         Scaffold(
-            modifier = modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
                 .navigationBarsPadding(),
             topBar = {
                 RuzmozdTopAppBar(title = stringResource(R.string.job_progress_screen_title))
             }
         ) { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier
+                    .padding(paddingValues)
                     .fillMaxSize(),
             ) {
                 when (state.jobProgress) {
@@ -148,7 +180,19 @@ fun JobProgressScreen(
                             isLoading = state.goToNextStep,
                             onClick = { jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.NextStep) },
                         )
-                        
+                        if (state.passedStep != 2) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            ColoredButton(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = localAlertColors.current.error,
+                                text = stringResource(id = R.string.job_progress_screen_cancel_job_button_text),
+                                onClick = {
+                                    jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.OpenCancelReasonsSheet)
+                                    scope.launch { sheetState.show() }
+                                },
+                            )
+                        }
+
                     }
 
                     is HttpRequestState.ErrorState -> ErrorPage(

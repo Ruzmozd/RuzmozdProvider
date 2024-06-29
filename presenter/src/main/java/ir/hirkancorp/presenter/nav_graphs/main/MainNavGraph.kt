@@ -36,7 +36,14 @@ fun MainNavGraph(
         }
         composable(route = MainScreens.JobProgressScreen.route) {
             val jobId = it.arguments?.getString(MainScreens.JOB_ID)?.toInt() ?: 0
-            JobProgressScreen(jobId = jobId)
+            JobProgressScreen(
+                jobId = jobId,
+                naviogate = { route ->
+                    route?.let {
+                        navHostController.navigate(it)
+                    } ?: navHostController.navigateUp()
+                }
+            )
         }
         composable(route = MainScreens.RequestsScreen.route) {
             RequestsScreen()

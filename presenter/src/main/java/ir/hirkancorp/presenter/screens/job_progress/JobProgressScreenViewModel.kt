@@ -8,12 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.hirkancorp.domain.job_progress.use_cases.ArriveNowUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.BeginJobUseCase
+import ir.hirkancorp.domain.job_progress.use_cases.CancelJobReasonsUseCase
+import ir.hirkancorp.domain.job_progress.use_cases.CancelJobUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.EndJobUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.JobProgressUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
 import ir.hirkancorp.presenter.core.state.HttpRequestState
+import ir.hirkancorp.presenter.core.utils.UiEvent
+import ir.hirkancorp.presenter.nav_graphs.main.MainScreens
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -23,11 +27,16 @@ class JobProgressScreenViewModel(
     private val jobProgressUseCase: JobProgressUseCase,
     private val arriveNowUseCase: ArriveNowUseCase,
     private val beginJobUseCase: BeginJobUseCase,
-    private val endJobUseCase: EndJobUseCase
+    private val endJobUseCase: EndJobUseCase,
+    private val cancelJobReasonsUseCase: CancelJobReasonsUseCase,
+    private val cancelJobUseCase: CancelJobUseCase
 ) : ViewModel(), KoinComponent {
 
     private val _navigateToHomeScreen = Channel<Pair<String, Boolean>>()
     val navigateToHomeScreen = _navigateToHomeScreen.receiveAsFlow()
+
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(JobProgressScreenState())
         private set
@@ -38,6 +47,55 @@ class JobProgressScreenViewModel(
         is JobProgressScreenEvent.HideDialog -> closeDialog()
         is JobProgressScreenEvent.Rate -> {}
         JobProgressScreenEvent.NextStep -> goTonextStep()
+        is JobProgressScreenEvent.CancelJob -> cancelJob(event.reasonId, event.comment)
+        JobProgressScreenEvent.OpenCancelReasonsSheet -> openCancelReasonsSheet()
+        JobProgressScreenEvent.OpenRatingsSheet -> openRatingSheet()
+    }
+
+    private fun openRatingSheet() {
+        state = state.copy(bottomSheetType = BottomSheetType.RatingType)
+    }
+
+    private fun cancelJob(reasonId: Int, comment: String?) {
+        state = state.copy(
+            cancelReasonId = reasonId,
+            cancelReasonComment = comment
+        )
+        viewModelScope.launch {
+            cancelJobUseCase(
+                jobId = state.jobId,
+                reasonId = state.cancelReasonId,
+                cancelComment = state.cancelReasonComment
+            ).collect { result ->
+                when(result) {
+                    is Error -> _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                    is Loading -> state = state.copy(cancelJobLoading = true)
+                    is Success -> {
+                        state = state.copy(bottomSheetType = null)
+                        _uiEvent.send(UiEvent.Navigate(MainScreens.MainScreen.route))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openCancelReasonsSheet() {
+        state = state.copy(bottomSheetType = BottomSheetType.CancelJobType)
+        viewModelScope.launch {
+            cancelJobReasonsUseCase().collect { result ->
+                state = when(result) {
+                    is Error -> {
+                        _uiEvent.send(UiEvent.ShowSnackBar(result.message.orEmpty()))
+                        state.copy(
+                            cancelReasons = HttpRequestState.ErrorState(message = result.message.orEmpty()),
+                            bottomSheetType = null
+                        )
+                    }
+                    is Loading -> state.copy(cancelReasons = HttpRequestState.LoadingState())
+                    is Success -> state.copy(cancelReasons = HttpRequestState.ResponseState(result.data?.cancelJobReasons.orEmpty()))
+                }
+            }
+        }
     }
 
     private fun goTonextStep() {

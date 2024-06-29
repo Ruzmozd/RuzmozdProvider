@@ -28,7 +28,7 @@ class JobProgressClient(private val httpClient: HttpClient) {
         parameter("job_id", jobId)
     }
 
-    suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComments: String): HttpResponse = httpClient.get {
+    suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComments: String?): HttpResponse = httpClient.get {
         url("cancel_job")
         parameter("job_id", jobId)
         parameter("reason_id", reasonId)

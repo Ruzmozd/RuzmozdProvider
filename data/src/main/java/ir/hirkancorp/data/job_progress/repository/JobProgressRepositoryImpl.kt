@@ -60,7 +60,7 @@ class JobProgressRepositoryImpl(private val jobProgressClient: JobProgressClient
         }
     )
 
-    override suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComment: String): Flow<ApiResult<String>> = commonRequest(
+    override suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComment: String?): Flow<ApiResult<String>> = commonRequest(
         httpResponse = { jobProgressClient.cancelJob(
             jobId = jobId,
             reasonId = reasonId,

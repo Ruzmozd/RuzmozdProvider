@@ -1,7 +1,7 @@
 package ir.hirkancorp.domain.job_progress.model
 
 data class CancelJobReasons(
-    val cancelJobReasons: List<CancelReason>
+    val cancelJobReasons: List<CancelReason> = emptyList()
 )
 
 data class CancelReason(

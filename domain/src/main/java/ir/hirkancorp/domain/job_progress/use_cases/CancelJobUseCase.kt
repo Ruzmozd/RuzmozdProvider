@@ -9,7 +9,7 @@ class CancelJobUseCase(private val jobProgressRepository: JobProgressRepository)
     suspend operator fun invoke(
         jobId: Int,
         reasonId: Int,
-        cancelComment: String,
+        cancelComment: String?,
     ): Flow<ApiResult<String>> = jobProgressRepository.cancelJob(
         jobId = jobId,
         reasonId = reasonId,

@@ -12,6 +12,6 @@ interface JobProgressRepository {
     suspend fun beginJob(jobId: Int): Flow<ApiResult<JobProgress>>
     suspend fun endJob(jobId: Int): Flow<ApiResult<JobProgress>>
     suspend fun cancelReasons(): Flow<ApiResult<CancelJobReasons>>
-    suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComment: String): Flow<ApiResult<String>>
+    suspend fun cancelJob(jobId: Int, reasonId: Int, cancelComment: String?): Flow<ApiResult<String>>
 
 }
