@@ -17,10 +17,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,6 +63,8 @@ fun JobProgressScreen(
         confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
         skipHalfExpanded = false
     )
+    
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
         jobId?.let { id ->
@@ -86,7 +91,9 @@ fun JobProgressScreen(
         jobProgressScreenViewModel.uiEvent.collectLatest { event ->
             when(event) {
                 is UiEvent.Navigate -> naviogate(event.route)
-                is UiEvent.ShowSnackBar -> {}
+                is UiEvent.ShowSnackBar -> {
+                    snackBarHostState.showSnackbar(event.message)
+                }
                 UiEvent.NavigateUp -> naviogate(null)
             }
         }
@@ -151,6 +158,9 @@ fun JobProgressScreen(
                 .navigationBarsPadding(),
             topBar = {
                 RuzmozdTopAppBar(title = stringResource(R.string.job_progress_screen_title))
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHostState)
             }
         ) { paddingValues ->
             Column(
