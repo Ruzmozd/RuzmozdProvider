@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -115,14 +116,14 @@ fun JobProgressScreen(
             }
         }) {
         Scaffold(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize()
+                .navigationBarsPadding(),
             topBar = {
                 RuzmozdTopAppBar(title = stringResource(R.string.job_progress_screen_title))
             }
         ) { paddingValues ->
             Column(
-                modifier = Modifier
-                    .padding(paddingValues)
+                modifier = Modifier.padding(paddingValues)
                     .fillMaxSize(),
             ) {
                 when (state.jobProgress) {
