@@ -6,6 +6,7 @@ import ir.hirkancorp.presenter.screens.main.MainViewModel
 import ir.hirkancorp.presenter.screens.profile_image.ProfileImageViewModel
 import ir.hirkancorp.presenter.screens.register.RegisterViewModel
 import ir.hirkancorp.presenter.screens.requests.RequestsScreenViewModel
+import ir.hirkancorp.presenter.screens.settings.SettingsViewModel
 import ir.hirkancorp.presenter.screens.upload_document.UploadDocumentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -18,4 +19,5 @@ val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { JobProgressScreenViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { RequestsScreenViewModel(get()) }
+    viewModel { SettingsViewModel(get()) }
 }
