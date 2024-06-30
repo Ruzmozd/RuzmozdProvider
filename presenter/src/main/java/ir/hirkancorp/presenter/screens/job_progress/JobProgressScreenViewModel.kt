@@ -12,6 +12,7 @@ import ir.hirkancorp.domain.job_progress.use_cases.CancelJobReasonsUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.CancelJobUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.EndJobUseCase
 import ir.hirkancorp.domain.job_progress.use_cases.JobProgressUseCase
+import ir.hirkancorp.domain.job_rating.use_cases.JobRatingUseCase
 import ir.hirkancorp.domain.utils.ApiResult.Error
 import ir.hirkancorp.domain.utils.ApiResult.Loading
 import ir.hirkancorp.domain.utils.ApiResult.Success
@@ -29,7 +30,8 @@ class JobProgressScreenViewModel(
     private val beginJobUseCase: BeginJobUseCase,
     private val endJobUseCase: EndJobUseCase,
     private val cancelJobReasonsUseCase: CancelJobReasonsUseCase,
-    private val cancelJobUseCase: CancelJobUseCase
+    private val cancelJobUseCase: CancelJobUseCase,
+    private val jobRatingUseCase: JobRatingUseCase,
 ) : ViewModel(), KoinComponent {
 
     private val _navigateToHomeScreen = Channel<Pair<String, Boolean>>()
@@ -45,7 +47,7 @@ class JobProgressScreenViewModel(
         is JobProgressScreenEvent.GetJobProgress -> getJobProgress(event.jobId)
         is JobProgressScreenEvent.JobCompleted -> showCompleteDialog(event.message)
         is JobProgressScreenEvent.HideDialog -> closeDialog()
-        is JobProgressScreenEvent.Rate -> {}
+        is JobProgressScreenEvent.Rate -> rateProvider(event.rate, event.comment)
         JobProgressScreenEvent.NextStep -> goTonextStep()
         is JobProgressScreenEvent.CancelJob -> cancelJob(event.reasonId, event.comment)
         JobProgressScreenEvent.OpenCancelReasonsSheet -> openCancelReasonsSheet()
@@ -79,6 +81,27 @@ class JobProgressScreenViewModel(
                     }
                 }
             }
+        }
+    }
+
+    private fun rateProvider(rate: Int, comment: String) {
+        viewModelScope.launch {
+            jobRatingUseCase.invoke(jobId = state.jobId, rating = rate, comment = comment)
+                .collect { result ->
+                    state = when (result) {
+                        is Loading -> state.copy(ratingLoading = true)
+                        is Success -> {
+                            _uiEvent.send(UiEvent.Navigate(MainScreens.MainScreen.route))
+                            state.copy(ratingLoading = false)
+                        }
+
+                        is Error -> state.copy(
+                            ratingLoading = false,
+                            ratingError = result.message.orEmpty()
+                        )
+
+                    }
+                }
         }
     }
 

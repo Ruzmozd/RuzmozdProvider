@@ -107,6 +107,7 @@ fun JobProgressScreen(
                 submitButtonText = stringResource(id = R.string.all_submit),
                 onConfirmation = {
                     jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.HideDialog)
+                    jobProgressScreenViewModel.onEvent(JobProgressScreenEvent.OpenRatingsSheet)
                     scope.launch { sheetState.show() }
                 })
 
