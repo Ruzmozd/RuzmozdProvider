@@ -22,11 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ir.hirkancorp.user.ui.theme.RuzmozdUserTheme
-import ir.hirkancorp.user.ui.theme.localAlertColors
-import ir.hirkancrop.domain.requests.model.Service
-import ir.hirkancrop.domain.requests.model.ServiceStatus
-import ir.hirkancrop.domain.requests.model.ServiceStatus.Companion.toStatus
+import ir.hirkancorp.domain.requests.model.Service
+import ir.hirkancorp.domain.requests.model.ServiceStatus
+import ir.hirkancorp.domain.requests.model.ServiceStatus.Companion.toStatus
+import ir.hirkancorp.presenter.core.theme.RuzmozdProviderTheme
+import ir.hirkancorp.presenter.core.theme.localAlertColors
 
 @Composable
 fun RequestItem(
@@ -159,7 +159,7 @@ fun LoadingRequestItem() {
 @Preview
 @Composable
 private fun RequestItemPreview() {
-    RuzmozdUserTheme {
+    RuzmozdProviderTheme {
         Column {
             RequestItem(
                 item = exampleService

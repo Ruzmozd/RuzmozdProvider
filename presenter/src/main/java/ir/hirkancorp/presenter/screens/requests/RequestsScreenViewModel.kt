@@ -4,10 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import ir.hirkancrop.domain.requests.use_case.RequestsUseCase
-import kotlinx.coroutines.launch
+import ir.hirkancorp.domain.requests.use_case.RequestsUseCase
 
 class RequestsScreenViewModel(private val requestsUseCase: RequestsUseCase) : ViewModel() {
 
