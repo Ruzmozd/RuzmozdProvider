@@ -11,6 +11,7 @@ import ir.hirkancorp.domain.provider_location.di.providerLocationModule
 import ir.hirkancorp.domain.provider_profile.di.providerProfileModule
 import ir.hirkancorp.domain.provider_status.di.providerStatusModule
 import ir.hirkancorp.domain.register.di.registerUserUseCaseModule
+import ir.hirkancorp.domain.requests.di.requestsModule
 import ir.hirkancorp.domain.update_device.di.updateDeviceModule
 import ir.hirkancorp.domain.upload_document.di.uploadDocumentUseCaseModule
 import ir.hirkancorp.domain.work_radius.di.workRadiusModule
@@ -31,6 +32,7 @@ val domainModule = module {
         providerLocationModule,
         jobRequestModule,
         jobProgressModule,
-        jobRatingModule
+        jobRatingModule,
+        requestsModule
     )
 }
