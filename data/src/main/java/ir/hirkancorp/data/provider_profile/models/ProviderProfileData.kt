@@ -27,6 +27,8 @@ data class ProviderProfileData(
     val mobileNumber: String = "",
     @SerialName("nationality_code")
     val nationalityCode: String = "",
+    @SerialName("nationality")
+    val nationality: String = "",
     @SerialName("pending_jobs_count")
     val pendingJobsCount: String = "",
     @SerialName("profile_image")

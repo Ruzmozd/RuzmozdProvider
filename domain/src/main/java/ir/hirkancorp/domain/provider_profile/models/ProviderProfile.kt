@@ -11,6 +11,7 @@ data class ProviderProfile(
     val lastName: String = "",
     val location: Location = Location(),
     val mobileNumber: String = "",
+    val nationality: String = "",
     val nationalityCode: String = "",
     val pendingJobsCount: String = "",
     val profileImage: String = "",

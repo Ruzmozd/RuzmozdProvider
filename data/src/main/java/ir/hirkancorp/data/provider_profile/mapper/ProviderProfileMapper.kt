@@ -17,6 +17,7 @@ fun ProviderProfileData.toDomain(): ProviderProfile = ProviderProfile(
     lastName = lastName,
     location = location.toDomain(),
     mobileNumber = mobileNumber,
+    nationality = nationality,
     nationalityCode = nationalityCode,
     pendingJobsCount = pendingJobsCount,
     profileImage = profileImage,
