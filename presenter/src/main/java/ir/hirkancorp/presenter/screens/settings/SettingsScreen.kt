@@ -37,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsScreen(
-    navigateTo: (route: String) -> Unit,
+    navigateTo: (route: String?) -> Unit,
     viewModel: SettingsViewModel = koinViewModel()
 ) {
 
@@ -87,7 +87,7 @@ fun SettingsScreen(
                         title = stringResource(R.string.settings_screen_item_profile),
                         icon = Icons.Outlined.Person,
                         onItemClick = {
-//                            navigateTo(SettingsScreens.ProfileScreen.route)
+                            navigateTo(SettingsScreens.ProfileScreen.route)
                         }
                     )
                     SettingItem(

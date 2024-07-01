@@ -3,6 +3,7 @@ package ir.hirkancorp.presenter.di
 import ir.hirkancorp.presenter.screens.job_progress.JobProgressScreenViewModel
 import ir.hirkancorp.presenter.screens.login.LoginViewModel
 import ir.hirkancorp.presenter.screens.main.MainViewModel
+import ir.hirkancorp.presenter.screens.profile.ProfileScreenViewModel
 import ir.hirkancorp.presenter.screens.profile_image.ProfileImageViewModel
 import ir.hirkancorp.presenter.screens.register.RegisterViewModel
 import ir.hirkancorp.presenter.screens.requests.RequestsScreenViewModel
@@ -20,4 +21,5 @@ val viewModelModule = module {
     viewModel { JobProgressScreenViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { RequestsScreenViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { ProfileScreenViewModel(get()) }
 }
