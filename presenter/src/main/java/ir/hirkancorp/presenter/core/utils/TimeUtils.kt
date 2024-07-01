@@ -11,5 +11,10 @@ object TimeUtils {
         return String.format(Locale(Locale.US.language), "%02d:%02d", minutes, seconds)
 
     }
+}
 
+fun Int.calculateRemainingTime(): Long {
+    val givenTimeInMillis = this
+    val leftTimeInMillis = System.currentTimeMillis() - givenTimeInMillis
+    return 90_000L - leftTimeInMillis
 }

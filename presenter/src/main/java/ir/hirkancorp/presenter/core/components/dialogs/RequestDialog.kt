@@ -20,6 +20,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,12 +37,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import ir.hirkancorp.core.LoggerUtil
 import ir.hirkancorp.domain.request.model.BookJob
 import ir.hirkancorp.presenter.R
 import ir.hirkancorp.presenter.core.LocalSpacing
 import ir.hirkancorp.presenter.core.components.ColoredButton
 import ir.hirkancorp.presenter.core.theme.RuzmozdProviderTheme
 import ir.hirkancorp.presenter.core.theme.localAlertColors
+import ir.hirkancorp.presenter.core.utils.CountDownTimerUtil
+import ir.hirkancorp.presenter.core.utils.TimeUtils.toTimeFormat
 
 
 @Composable
@@ -56,6 +66,21 @@ fun RequestDialog(
     val localColors = localAlertColors.current
 
     val time = if (request.fareType == "PerHour") stringResource(id = R.string.request_dialog_hours, request.rating) else  stringResource(id = R.string.request_dialog_days, request.rating)
+
+    var timeToShow by remember { mutableLongStateOf(request.requestTime.toLong()) }
+
+    DisposableEffect(key1 = true) {
+        CountDownTimerUtil.startTimer(
+            millisInFuture = 90000L,
+            onTick = { tick ->
+                timeToShow = tick
+            },
+            onFinish = { }
+        )
+        onDispose {
+            CountDownTimerUtil.cancelTimer()
+        }
+    }
 
     Dialog(
         onDismissRequest = { onDismissRequest() },
@@ -85,10 +110,10 @@ fun RequestDialog(
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier.fillMaxSize(),
-                        progress = .73f,
+                        progress = 1 - (timeToShow.toFloat() / 90_000L),
                         backgroundColor = MaterialTheme.colors.onBackground.copy(alpha = .1f)
                     )
-                    Text(text = timerState, style = MaterialTheme.typography.h5)
+                    Text(text = timeToShow.toTimeFormat(), style = MaterialTheme.typography.h5)
                 }
                 Spacer(modifier = Modifier.height(spacing.spaceMedium))
                 Row(
